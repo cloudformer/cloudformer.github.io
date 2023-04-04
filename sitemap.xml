@@ -4,13 +4,33 @@
   
   <url>
     <loc>https://cloudformer.github.io/</loc>
-    <lastmod>2023-04-03T12:01:26+08:00</lastmod>
+    <lastmod>2023-04-04T22:14:55+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://cloudformer.github.io/tags/example/</loc>
-    <lastmod>2023-04-03T12:01:26+08:00</lastmod>
+    <lastmod>2023-04-04T22:14:55+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://cloudformer.github.io/tags/markdown/</loc>
+    <lastmod>2023-04-04T22:14:55+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://cloudformer.github.io/post/</loc>
+    <lastmod>2023-04-04T22:14:55+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://cloudformer.github.io/post/sec-automation/</loc>
+    <lastmod>2023-04-04T22:14:55+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://cloudformer.github.io/tags/</loc>
+    <lastmod>2023-04-04T22:14:55+08:00</lastmod>
   </url>
   
   <url>
@@ -20,16 +40,6 @@
   
   <url>
     <loc>https://cloudformer.github.io/tags/photoswipe/</loc>
-    <lastmod>2023-04-03T12:01:26+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cloudformer.github.io/post/</loc>
-    <lastmod>2023-04-03T12:01:26+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cloudformer.github.io/tags/</loc>
     <lastmod>2023-04-03T12:01:26+08:00</lastmod>
   </url>
   
@@ -71,11 +81,6 @@
   <url>
     <loc>https://cloudformer.github.io/post/2015-02-26-flake-it-till-you-make-it/</loc>
     <lastmod>2015-02-26T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://cloudformer.github.io/tags/markdown/</loc>
-    <lastmod>2015-02-20T00:00:00+00:00</lastmod>
   </url>
   
   <url>

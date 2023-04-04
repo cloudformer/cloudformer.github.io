@@ -7,14 +7,26 @@
     <generator>Hugo -- gohugo.io</generator>
     <managingEditor>youremail@domain.com (Some Person)</managingEditor>
     <webMaster>youremail@domain.com (Some Person)</webMaster>
-    <lastBuildDate>Mon, 03 Apr 2023 12:01:26 +0800</lastBuildDate><atom:link href="https://cloudformer.github.io/tags/example/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 04 Apr 2023 22:14:55 +0800</lastBuildDate><atom:link href="https://cloudformer.github.io/tags/example/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Sec Automation</title>
+      <link>https://cloudformer.github.io/post/sec-automation/</link>
+      <pubDate>Tue, 04 Apr 2023 22:14:55 +0800</pubDate>
+      <author>youremail@domain.com (Some Person)</author>
+      <guid>https://cloudformer.github.io/post/sec-automation/</guid>
+      <description>这是个表格：晚上吃大餐 表格:
+   Number Next number Previous number     Five Six Four   Ten Eleven Nine   Seven Eight Six   Two Three One    How about a yummy crepe?
+Here&amp;rsquo;s a code chunk with syntax highlighting:
+var foo = function(x) { return(x + 5); } foo(3) </description>
+    </item>
+    
     <item>
       <title>First</title>
       <link>https://cloudformer.github.io/post/first/</link>
       <pubDate>Mon, 03 Apr 2023 12:01:26 +0800</pubDate>
       <author>youremail@domain.com (Some Person)</author>
       <guid>https://cloudformer.github.io/post/first/</guid>
-      <description>这是百慕大 自动化</description>
+      <description>这是百慕大 自动化，</description>
     </item>
     
     <item>
