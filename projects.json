@@ -17,7 +17,7 @@
           "url": "https://github.com/cloudformer/s3rds",
           "diagram": "https://raw.githubusercontent.com/cloudformer/s3rds/main/docs/architecture.svg",
           "demo": "",
-          "what": "RDS / Aurora Serverless",
+          "what": "RDS (db.t4g.micro and up)",
           "built_on": "S3 + Lambda (SQLite)",
           "use": "from s3rds import pymysql · SQLAlchemy · Django",
           "was": "~$14–45",
@@ -33,7 +33,7 @@
           "what": "ElastiCache (Redis)",
           "built_on": "DynamoDB",
           "use": "from dynamoredis import redis",
-          "was": "~$90",
+          "was": "from ~$6, per GB-hour",
           "now": "$0",
           "status": "0.1.2 on PyPI",
           "live": true
@@ -87,7 +87,7 @@
           "what": "HashiCorp Vault",
           "built_on": "Lambda + S3 + KMS",
           "use": "vault CLI, Terraform provider, UI: only VAULT_ADDR",
-          "was": "~$450 HCP",
+          "was": "~$450 HCP / ~$40 3 × EC2",
           "status": "0.1.0 on PyPI",
           "live": true
         },
@@ -98,7 +98,7 @@
           "demo": "",
           "what": "Healthchecks (cron monitoring)",
           "built_on": "Lambda + s3rds, deployed together",
-          "use": "ping URLs, API, UI: only the host",
+          "use": "ping URLs, API, UI: only the host · for a few dozen checks (each ping writes the database)",
           "was": "a VM + a database",
           "status": "0.1.0 running",
           "live": true

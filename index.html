@@ -25,9 +25,9 @@
   --tint: #e8f1ee;       /* hero band */
   --grid: rgba(10, 110, 92, 0.07);
 
-  --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
-  --body: "IBM Plex Sans", "Helvetica Neue", Arial, system-ui, sans-serif;
-  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+  --body: "IBM Plex Sans", "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, "PingFang SC", "Microsoft YaHei", "Noto Sans SC", monospace;
 
   --step--1: 0.8125rem;
   --step-0: 1rem;
@@ -80,6 +80,15 @@ h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; letter-
 .bar nav { display: flex; gap: 1.25rem; font-size: var(--step--1); flex-wrap: wrap; }
 .bar nav a { text-decoration: none; color: var(--muted); }
 .bar nav a:hover { color: var(--ink); }
+.bar nav { align-items: center; }
+.lang {
+  font: 500 var(--step--1)/1 var(--body); color: var(--ink); background: transparent; cursor: pointer;
+  border: 1px solid var(--rule); border-radius: 4px; padding: 0.35rem 0.6rem;
+}
+.lang:hover { border-color: var(--ink); }
+.lang:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+:lang(zh) .hero h1 { line-height: 1.2; letter-spacing: 0; }
+:lang(zh) .eyebrow, :lang(zh) .row.labels { letter-spacing: 0.02em; }
 
 /* ---- hero ---- */
 .hero {
@@ -179,7 +188,12 @@ section.block .wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); border-top: 1px
 .preview img { display: block; width: 100%; height: auto; border-radius: 3px; }
 .preview figcaption { margin-top: 0.45rem; font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
 .row .name:hover + .preview, .row .name:focus-visible + .preview { opacity: 1; visibility: visible; }
-@media (hover: none) { .preview { display: none; } }
+.diagram-link { display: none; }
+/* touch screens have no hover: the preview gives way to a link to the diagram itself */
+@media (hover: none) {
+  .preview { display: none; }
+  .diagram-link { display: inline-block; margin-top: 0.2rem; font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+}
 .row .what { min-width: 0; }
 .row .what b { font-weight: 600; }
 .row .what div { color: var(--muted); font-size: var(--step--1); }
@@ -233,10 +247,11 @@ section.block .wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); border-top: 1px
   <div class="wrap">
     <a class="mark" href="#top">Idle<span>Free</span></a>
     <nav aria-label="Sections">
-      <a href="#projects">Projects</a>
-      <a href="#how">How it works</a>
+      <a href="#projects" data-i18n="nav_projects">Projects</a>
+      <a href="#how" data-i18n="nav_how">How it works</a>
       <a href="https://github.com/cloudformer">GitHub</a>
       <a href="https://pypi.org/user/cloudformer/">PyPI</a>
+      <button class="lang" id="lang" type="button" lang="zh-CN" aria-label="切换到中文">中文</button>
     </nav>
   </div>
 </header>
@@ -245,29 +260,29 @@ section.block .wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); border-top: 1px
   <section class="hero">
     <div class="wrap">
       <div class="lede">
-        <div class="eyebrow">Truly free when idle</div>
-        <h1>Cloud services that cost nothing while nobody uses them.</h1>
-        <p>AWS's "serverless" databases, caches and schedulers still bill every hour. IdleFree rebuilds them on
+        <div class="eyebrow" data-i18n="hero_eyebrow">Truly free when idle</div>
+        <h1 data-i18n="hero_h1">Cloud services that cost nothing while nobody uses them.</h1>
+        <p data-i18n="hero_p">AWS's "serverless" databases, caches and schedulers still bill every hour. IdleFree rebuilds them on
           Lambda, S3 and DynamoDB, behind the client you already use. You pay per request, and nothing when it's quiet.</p>
         <div class="cta">
-          <a class="btn primary" href="#projects">See the projects</a>
-          <a class="btn ghost" href="https://github.com/cloudformer/s3rds">Start with s3rds</a>
+          <a class="btn primary" href="#projects" data-i18n="cta_projects">See the projects</a>
+          <a class="btn ghost" href="https://github.com/cloudformer/s3rds" data-i18n="cta_start">Start with s3rds</a>
         </div>
       </div>
 
       <article class="statement" aria-label="Monthly idle cost, before and after">
-        <header><span>IDLE BILL · PER MONTH</span><span>0 requests</span></header>
+        <header><span data-i18n="r_head">IDLE BILL · PER MONTH</span><span data-i18n="r_req">0 requests</span></header>
         <ol>
-          <li><span>RDS / Aurora Serverless</span><span class="was">~$14–45</span><small>s3rds · SQLite on S3</small></li>
-          <li><span>ElastiCache Serverless (Redis)</span><span class="was">~$90</span><small>dynamoredis · DynamoDB</small></li>
-          <li><span>Managed Airflow (MWAA)</span><span class="was">~$360</span><small>lambdaflow · Lambda + Step Functions</small></li>
-          <li><span>HCP Vault Dedicated</span><span class="was">~$450</span><small>lambdavault · Lambda + S3 + KMS</small></li>
+          <li><span>RDS (db.t4g.micro)</span><span class="was">~$14–45</span><small data-i18n="r_rds">s3rds · SQLite on S3</small></li>
+          <li><span>ElastiCache Serverless</span><span class="was">from ~$6</span><small data-i18n="r_cache">billed per GB-hour, traffic or not: Valkey ~$61 / GB a month, Redis OSS ~$91 · dynamoredis · DynamoDB</small></li>
+          <li><span>Managed Airflow (MWAA)</span><span class="was">~$360</span><small data-i18n="r_flow">lambdaflow · Lambda + Step Functions</small></li>
+          <li><span>Vault: HCP / 3 × EC2</span><span class="was">~$450 / ~$40</span><small data-i18n="r_vault">lambdavault · Lambda + S3 + KMS</small></li>
         </ol>
         <div class="total">
-          <span>Usual idle floor</span><span class="was">~$914–945</span>
-          <div class="now"><span>With IdleFree</span><b>≈ $0</b></div>
+          <span data-i18n="r_total">Cheapest idle floor</span><span class="was">~$420</span>
+          <div class="now"><span data-i18n="r_now">With IdleFree</span><b>≈ $0</b></div>
         </div>
-        <footer>Idle floor = the minimum a service bills with no traffic. With IdleFree you pay per request; S3 storage costs cents.</footer>
+        <footer data-i18n="r_foot">Idle floor = the least a service bills with no traffic; the total takes the cheapest option of each line. With IdleFree you pay per request; S3 storage costs cents.</footer>
       </article>
     </div>
   </section>
@@ -275,21 +290,21 @@ section.block .wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); border-top: 1px
   <section class="block" id="kinds">
     <div class="wrap">
       <div class="head">
-        <h2>Two kinds of project</h2>
-        <p>Either an AWS service rebuilt behind its standard client, or an existing application moved onto Lambda
+        <h2 data-i18n="kinds_h2">Two kinds of project</h2>
+        <p data-i18n="kinds_p">Either an AWS service rebuilt behind its standard client, or an existing application moved onto Lambda
           with its code unchanged. In both cases the switch is one line, and so is the way back.</p>
       </div>
       <div class="kinds">
         <div class="kind infra">
           <div class="eyebrow">IdleFree Infra</div>
-          <h3>An AWS service, rebuilt</h3>
-          <p>Same client, same API, same error classes. When you outgrow it, the real service is one import away.</p>
+          <h3 data-i18n="infra_h3">An AWS service, rebuilt</h3>
+          <p data-i18n="infra_p">Same client, same API, same error classes. When you outgrow it, the real service is one import away.</p>
           <div class="swap"><s>import pymysql</s> → <ins>from s3rds import pymysql</ins></div>
         </div>
         <div class="kind app">
           <div class="eyebrow">IdleFree App</div>
-          <h3>An application, unchanged, on Lambda</h3>
-          <p>The official release with its own CLI, API and UI. Only the host changes; there is no new client to learn.</p>
+          <h3 data-i18n="app_h3">An application, unchanged, on Lambda</h3>
+          <p data-i18n="app_p">The official release with its own CLI, API and UI. Only the host changes; there is no new client to learn.</p>
           <div class="swap"><s>VAULT_ADDR=https://vault.internal</s> → <ins>VAULT_ADDR=&lt;Function URL&gt;</ins></div>
         </div>
       </div>
@@ -299,8 +314,8 @@ section.block .wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); border-top: 1px
   <section class="block" id="projects">
     <div class="wrap">
       <div class="head">
-        <h2>Projects</h2>
-        <p>Each one deploys into your own AWS account with one <code>terraform apply</code>. Each has its own
+        <h2 data-i18n="projects_h2">Projects</h2>
+        <p data-i18n="projects_p">Each one deploys into your own AWS account with one <code>terraform apply</code>. Each has its own
           compatibility report, generated by its test run.</p>
       </div>
 
@@ -311,23 +326,23 @@ section.block .wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); border-top: 1px
   <section class="block" id="how">
     <div class="wrap">
       <div class="head">
-        <h2>How every project works</h2>
-        <p>Every project follows the same rules, so if you know one, you know them all.</p>
+        <h2 data-i18n="how_h2">How every project works</h2>
+        <p data-i18n="how_p">Every project follows the same rules, so if you know one, you know them all.</p>
       </div>
       <div class="rules">
-        <div class="rule"><h3>≈ $0 when idle</h3><p>Only pay-per-request primitives: S3, DynamoDB, SQS, Lambda, Step Functions, EventBridge. Nothing runs, polls or is provisioned while nobody uses it.</p></div>
-        <div class="rule"><h3>The client you already have</h3><p>pymysql, redis-py, Airflow, redshift_connector, the vault CLI. Moving to the real service later is one import or one URL.</p></div>
-        <div class="rule"><h3>Only tested features count</h3><p>Every feature runs on the real service and on the project, and the results are compared. The report is regenerated by every test run.</p></div>
-        <div class="rule"><h3>Refused, never silently different</h3><p>What needs a real server raises NotSupportedError with the reason, and MIGRATION.md says when to move.</p></div>
-        <div class="rule"><h3>Your account, one command</h3><p>Terraform from the first release, least-privilege IAM, arm64 and x86_64. Destroy removes everything.</p></div>
-        <div class="rule"><h3>Built for the long tail</h3><p>MVPs, side projects, dev and staging: small, idle most of the time. Not a replacement for a busy production cluster.</p></div>
+        <div class="rule"><h3 data-i18n="rule1_h">≈ $0 when idle</h3><p data-i18n="rule1_p">Only pay-per-request primitives: S3, DynamoDB, SQS, Lambda, Step Functions, EventBridge. Nothing runs, polls or is provisioned while nobody uses it.</p></div>
+        <div class="rule"><h3 data-i18n="rule2_h">The client you already have</h3><p data-i18n="rule2_p">pymysql, redis-py, Airflow, redshift_connector, the vault CLI. Moving to the real service later is one import or one URL.</p></div>
+        <div class="rule"><h3 data-i18n="rule3_h">Only tested features count</h3><p data-i18n="rule3_p">Every feature runs on the real service and on the project, and the results are compared. The report is regenerated by every test run.</p></div>
+        <div class="rule"><h3 data-i18n="rule4_h">Refused, never silently different</h3><p data-i18n="rule4_p">What needs a real server raises NotSupportedError with the reason, and MIGRATION.md says when to move.</p></div>
+        <div class="rule"><h3 data-i18n="rule5_h">Your account, one command</h3><p data-i18n="rule5_p">Terraform from the first release, least-privilege IAM, arm64 and x86_64. Destroy removes everything.</p></div>
+        <div class="rule"><h3 data-i18n="rule6_h">Built for the long tail</h3><p data-i18n="rule6_p">MVPs, side projects, dev and staging: small, idle most of the time. Not a replacement for a busy production cluster.</p></div>
       </div>
 
-      <h3 class="checks-title">Before a project starts: three checks</h3>
+      <h3 class="checks-title" data-i18n="checks_title">Before a project starts: three checks</h3>
       <ol class="checks">
-        <li><b>AWS's own service bills while idle.</b> If it scales to zero, or a lasting free tier covers small use, there is nothing to rebuild.</li>
-        <li><b>No pay-per-use AWS service is a small switch away.</b> If SQS or Athena already does the job, use it instead of imitating an old API on top of it.</li>
-        <li><b>Never dress one AWS service up as another product.</b> SQS stays SQS. A project rebuilds a service that bills while idle, behind the client its users already have.</li>
+        <li data-i18n="check1"><b>AWS's own service bills while idle.</b> If it scales to zero, or a lasting free tier covers small use, there is nothing to rebuild.</li>
+        <li data-i18n="check2"><b>No pay-per-use AWS service is a small switch away.</b> If SQS or Athena already does the job, use it instead of imitating an old API on top of it.</li>
+        <li data-i18n="check3"><b>Never dress one AWS service up as another product.</b> SQS stays SQS. A project rebuilds a service that bills while idle, behind the client its users already have.</li>
       </ol>
     </div>
   </section>
@@ -348,7 +363,8 @@ section.block .wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); border-top: 1px
 /* The two project tables come from projects.json (next to this page): the only place projects are maintained.
    Each section: id ("infra" | "app": its color), title, subtitle, columns (5 labels), projects, optional next.
    Each project: name, url, diagram (architecture image, shown on hover), demo (a link: "demo" in the Demo column; empty: "Coming soon"),
-   what, built_on, use, was (struck out), now (optional), status, live (green pill). */
+   what, built_on, use, was (struck out), now (optional), status, live (green pill).
+   On touch screens (no hover) the diagram is a link under the name instead of a preview. Project rows stay English. */
 (function () {
   var root = document.getElementById("ledgers");
   function el(tag, cls, text) {
@@ -385,6 +401,9 @@ section.block .wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); border-top: 1px
         fig.appendChild(img);
         fig.appendChild(el("figcaption", null, p.name + " · architecture"));
         cell.appendChild(fig);
+        var link = el("a", "diagram-link", "architecture \u2197");
+        link.href = p.diagram;
+        cell.appendChild(link);
         var flip = function () {   // open upward when there is no room below
           fig.classList.toggle("up", window.innerHeight - name.getBoundingClientRect().bottom < 340);
         };
@@ -429,6 +448,53 @@ section.block .wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); border-top: 1px
       root.textContent = "";
       root.appendChild(el("p", "later", "The project list could not be loaded (" + e.message + "). See github.com/cloudformer."));
     });
+})();
+
+/* Language: English is the page itself; Chinese replaces every [data-i18n] element from strings.json ("zh").
+   #zh / #en in the address picks one (share cloudformer.github.io/#zh in Chinese forums); otherwise the last choice
+   (remembered in this browser), otherwise English. In-page links (#projects) keep the language. */
+(function () {
+  var KEY = "idlefree-lang";
+  var nodes = Array.prototype.slice.call(document.querySelectorAll("[data-i18n]"));
+  var en = {};
+  nodes.forEach(function (n) { en[n.getAttribute("data-i18n")] = n.innerHTML; });
+  var zh = null, current = "en";
+  var button = document.getElementById("lang");
+
+  function remember(lang) { try { localStorage.setItem(KEY, lang); } catch (e) { /* private mode: this visit only */ } }
+  function saved() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
+  function fromHash() { var h = location.hash.slice(1); return h === "zh" || h === "en" ? h : null; }
+
+  function render(lang) {
+    nodes.forEach(function (n) {
+      var k = n.getAttribute("data-i18n");
+      n.innerHTML = lang === "zh" && zh && zh[k] != null ? zh[k] : en[k];
+    });
+    document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
+    button.textContent = lang === "zh" ? "EN" : "中文";
+    button.setAttribute("lang", lang === "zh" ? "en" : "zh-CN");
+    button.setAttribute("aria-label", lang === "zh" ? "Switch to English" : "切换到中文");
+    current = lang;
+  }
+  function use(lang) {
+    if (lang !== "zh" || zh) { render(lang); return; }
+    fetch("strings.json", { cache: "no-cache" })
+      .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+      .then(function (data) { zh = data.zh || {}; render("zh"); })
+      .catch(function () { render("en"); });
+  }
+  button.addEventListener("click", function () {
+    var next = current === "zh" ? "en" : "zh";
+    remember(next);
+    use(next);
+  });
+  window.addEventListener("hashchange", function () {
+    var h = fromHash();
+    if (h && h !== current) { remember(h); use(h); }
+  });
+  var first = fromHash() || saved() || "en";
+  if (fromHash()) remember(first);
+  use(first);
 })();
 </script>
 </body>

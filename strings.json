@@ -1,0 +1,52 @@
+{
+  "zh": {
+    "nav_projects": "项目",
+    "nav_how": "规则",
+
+    "hero_eyebrow": "空闲时真正免费",
+    "hero_h1": "没人用的时候，一分钱都不花的云服务。",
+    "hero_p": "AWS 的 “serverless” 数据库、缓存和调度服务，没人用也按小时收费。IdleFree 把它们重建在 Lambda、S3 和 DynamoDB 上，你继续用原来的客户端。按请求付费，没人用就不花钱。",
+    "cta_projects": "查看项目",
+    "cta_start": "从 s3rds 开始",
+
+    "r_head": "空闲账单 · 每月",
+    "r_req": "0 次请求",
+    "r_rds": "s3rds · S3 上的 SQLite",
+    "r_cache": "按每 GB 每小时计费，有没有流量都收：Valkey 约 $61 / GB / 月，Redis OSS 约 $91 · dynamoredis · DynamoDB",
+    "r_flow": "lambdaflow · Lambda + Step Functions",
+    "r_vault": "lambdavault · Lambda + S3 + KMS",
+    "r_total": "最便宜的空闲底价",
+    "r_now": "用 IdleFree",
+    "r_foot": "空闲底价 = 没有任何流量时服务最少要收的钱；合计按每一行最便宜的方案算。用 IdleFree 按请求付费，S3 存储每月几美分。",
+
+    "kinds_h2": "两类项目",
+    "kinds_p": "要么把一个 AWS 服务在原客户端背后重建，要么把一个现成的应用原样搬到 Lambda 上。两种都只需改一行就能切换，切回去也只要一行。",
+    "infra_h3": "重建一个 AWS 服务",
+    "infra_p": "同样的客户端、同样的 API、同样的错误类型。规模大了，改一行 import 就回到真服务。",
+    "app_h3": "现成的应用，代码不改，跑在 Lambda 上",
+    "app_p": "官方发布版，带着它自己的命令行、API 和界面。只换宿主，不用学新的客户端。",
+
+    "projects_h2": "项目",
+    "projects_p": "每个项目都用一条 <code>terraform apply</code> 部署到你自己的 AWS 账号，各自有一份由测试自动生成的兼容性报告。",
+
+    "how_h2": "每个项目都遵守的规则",
+    "how_p": "所有项目规则相同，看懂一个就看懂全部。",
+    "rule1_h": "空闲 ≈ $0",
+    "rule1_p": "只用按请求计费的原语：S3、DynamoDB、SQS、Lambda、Step Functions、EventBridge。没人用时，什么都不运行、不轮询、不预留。",
+    "rule2_h": "用你已有的客户端",
+    "rule2_p": "pymysql、redis-py、Airflow、redshift_connector、vault 命令行。以后换回真服务，只改一行 import 或一个地址。",
+    "rule3_h": "只有测过的才算支持",
+    "rule3_p": "每个功能都在真服务和项目上各跑一遍，比对结果。每次测试都会重新生成兼容性报告。",
+    "rule4_h": "不支持就明确拒绝，绝不悄悄不一样",
+    "rule4_p": "需要真服务器才能做的事，会抛出 NotSupportedError 并说明原因；MIGRATION.md 写明什么时候该换回真服务。",
+    "rule5_h": "部署在你自己的账号，一条命令",
+    "rule5_p": "第一个版本就用 Terraform，IAM 最小权限，同时支持 arm64 和 x86_64。destroy 会删得干干净净。",
+    "rule6_h": "为长尾而生",
+    "rule6_p": "MVP、个人项目、开发和测试环境：规模小，大部分时间空闲。不是繁忙生产集群的替代品。",
+
+    "checks_title": "开新项目前的三项检查",
+    "check1": "<b>AWS 自己的服务空闲时也收费。</b>如果它能缩到零，或者有长期免费额度覆盖小规模使用，就没什么可重建的。",
+    "check2": "<b>没有只需小改就能换上的按量付费 AWS 服务。</b>如果 SQS 或 Athena 已经能做，就直接用它，不要在它上面模仿一个旧 API。",
+    "check3": "<b>绝不把一个 AWS 服务包装成另一个产品。</b>SQS 就是 SQS。项目要重建的是空闲也收费的服务，并保留用户已有的客户端。"
+  }
+}
