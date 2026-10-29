@@ -154,10 +154,10 @@ section.block .wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); border-top: 1px
   display: grid; grid-template-columns: 9.5rem minmax(0, 1.3fr) minmax(0, 1fr) 7.5rem 8.5rem;
   gap: 0.5rem 1.25rem; align-items: baseline; padding: 0.95rem 0; border-top: 1px solid var(--rule);
 }
-.ledger.has-demo .row { grid-template-columns: 9.5rem minmax(0, 1.3fr) minmax(0, 1fr) 7.5rem 8.5rem 5.5rem; }
+.ledger.has-demo .row { grid-template-columns: 9.5rem minmax(0, 1.3fr) minmax(0, 1fr) 7.5rem 8.5rem 6.5rem; }
 .row .demo { font-size: var(--step--1); font-weight: 500; white-space: nowrap; text-decoration: underline; text-decoration-color: var(--rule); text-underline-offset: 4px; }
 .row .demo:hover { text-decoration-color: currentColor; }
-.row .nodemo { color: var(--muted); }
+.row .nodemo { color: var(--muted); font-size: var(--step--1); white-space: nowrap; }
 .row.labels { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); padding-block: 0.5rem; }
 .row .namecell { position: relative; min-width: 0; }
 .row .name {
@@ -213,8 +213,7 @@ section.block .wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); border-top: 1px
   .row.labels { display: none; }
   .row .namecell { grid-column: 1; }
   .row .pill { grid-column: 2; grid-row: 1; justify-self: end; }
-  .row .what, .row .use, .row .floor, .row .demo { grid-column: 1 / -1; }
-  .row .nodemo { display: none; }
+  .row .what, .row .use, .row .floor, .row .demo, .row .nodemo { grid-column: 1 / -1; }
 }
 @media (max-width: 560px) {
   .kinds { grid-template-columns: 1fr; }
@@ -348,7 +347,7 @@ section.block .wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); border-top: 1px
 <script>
 /* The two project tables come from projects.json (next to this page): the only place projects are maintained.
    Each section: id ("infra" | "app": its color), title, subtitle, columns (5 labels), projects, optional next.
-   Each project: name, url, diagram (architecture image, shown on hover), demo (optional: a "Try it" column),
+   Each project: name, url, diagram (architecture image, shown on hover), demo (a link: "demo" in the Demo column; empty: "Coming soon"),
    what, built_on, use, was (struck out), now (optional), status, live (green pill). */
 (function () {
   var root = document.getElementById("ledgers");
@@ -364,9 +363,8 @@ section.block .wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); border-top: 1px
     var h = el("h3", null, sec.title + " ");
     if (sec.subtitle) h.appendChild(el("span", null, sec.subtitle));
     box.appendChild(h);
-    // a Demo column only in a table where at least one project has a demo
-    var hasDemo = (sec.projects || []).some(function (p) { return !!p.demo; });
-    if (hasDemo) box.classList.add("has-demo");
+    var hasDemo = true;   // the Demo column is always there: "Coming soon" until a project has a demo link
+    box.classList.add("has-demo");
     var labels = el("div", "row labels");
     labels.setAttribute("aria-hidden", "true");
     (sec.columns || []).forEach(function (c) { labels.appendChild(el("span", null, c)); });
@@ -405,11 +403,11 @@ section.block .wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); border-top: 1px
       row.appendChild(floor);
       row.appendChild(el("span", "pill" + (p.live ? " live" : ""), p.status || ""));
       if (p.demo) {
-        var demo = el("a", "demo", "Try it \u2197");
+        var demo = el("a", "demo", "demo \u2197");
         demo.href = p.demo;
         row.appendChild(demo);
       } else if (hasDemo) {
-        row.appendChild(el("span", "nodemo", "\u2014"));
+        row.appendChild(el("span", "nodemo", "Coming soon"));
       }
       box.appendChild(row);
     });
