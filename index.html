@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>IdleFree</title>
+<meta name="description" content="IdleFree: AWS services and self-hosted apps rebuilt to cost about $0 while nobody uses them.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a billing-statement hero (the idle bill, struck to $0), then the catalogue as two ledgers (Infra, App), then the rules. */
+:root {
+  --paper: #f2f4f6;      /* page */
+  --sheet: #ffffff;      /* the statement and ledger surfaces */
+  --ink: #121a22;        /* text */
+  --muted: #5b6874;      /* secondary text, slightly blue-biased grey */
+  --rule: #d6dce2;       /* hairlines */
+  --accent: #0a6e5c;     /* the $0: deep meter green */
+  --accent-soft: #e0f0ec;
+  --strike: #b4372f;     /* the idle bill being struck out */
+  --chip: #e8ecf0;
+  --app: #9a5b0b;        /* IdleFree App: amber, Infra keeps the meter green */
+  --app-soft: #f7ecda;
+  --tint: #e8f1ee;       /* hero band */
+  --grid: rgba(10, 110, 92, 0.07);
+
+  --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --body: "IBM Plex Sans", "Helvetica Neue", Arial, system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --step--1: 0.8125rem;
+  --step-0: 1rem;
+  --step-1: 1.25rem;
+  --step-2: 1.75rem;
+  --step-3: clamp(2.25rem, 1.4rem + 3.6vw, 3.75rem);
+  --wrap: 72rem;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0e1418; --sheet: #151d23; --ink: #e6ecf0; --muted: #93a1ad; --rule: #26323b;
+    --accent: #4fd1b0; --accent-soft: #143430; --strike: #f0857a; --chip: #1e2a32;
+    --app: #f2b35c; --app-soft: #33281a; --tint: #11201f; --grid: rgba(79, 209, 176, 0.06);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0e1418; --sheet: #151d23; --ink: #e6ecf0; --muted: #93a1ad; --rule: #26323b;
+  --accent: #4fd1b0; --accent-soft: #143430; --strike: #f0857a; --chip: #1e2a32;
+  --app: #f2b35c; --app-soft: #33281a; --tint: #11201f; --grid: rgba(79, 209, 176, 0.06);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 var(--step-0)/1.6 var(--body);
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration-color: var(--rule); text-underline-offset: 3px; }
+a:hover { text-decoration-color: var(--accent); }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+code { font-family: var(--mono); font-size: 0.9em; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+
+.wrap {
+  max-width: var(--wrap);
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+/* ---- top bar ---- */
+.bar { border-bottom: 1px solid var(--rule); }
+.bar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 0.9rem; }
+.mark { font-family: var(--display); font-weight: 800; font-size: var(--step-1); text-decoration: none; letter-spacing: -0.02em; }
+.mark span { color: var(--accent); }
+.bar nav { display: flex; gap: 1.25rem; font-size: var(--step--1); flex-wrap: wrap; }
+.bar nav a { text-decoration: none; color: var(--muted); }
+.bar nav a:hover { color: var(--ink); }
+
+/* ---- hero ---- */
+.hero {
+  background-color: var(--tint);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 32px 32px;
+  border-bottom: 1px solid var(--rule);
+}
+.hero .wrap { display: grid; grid-template-columns: 1.1fr 1fr; gap: clamp(2rem, 5vw, 4.5rem); align-items: center; padding-block: clamp(2.5rem, 7vw, 5.5rem); }
+.hero .lede { min-width: 0; display: grid; gap: 1.25rem; }
+.eyebrow { font-family: var(--mono); font-size: var(--step--1); letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+.hero h1 { font-size: var(--step-3); line-height: 1.04; font-weight: 800; }
+.hero p { margin: 0; max-width: 34rem; color: var(--muted); font-size: var(--step-1); line-height: 1.5; }
+.cta { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+.btn {
+  display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.7rem 1.1rem;
+  font: 500 var(--step--1)/1 var(--body); text-decoration: none; border-radius: 6px;
+  border: 1px solid var(--ink);
+}
+.btn.primary { background: var(--ink); color: var(--paper); }
+.btn.primary:hover { background: var(--accent); border-color: var(--accent); }
+.btn.ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+/* the statement: the page's one bold element */
+.statement {
+  min-width: 0; background: var(--sheet); border: 1px solid var(--rule); border-radius: 4px;
+  padding: 1.5rem 1.5rem 1.25rem; font-family: var(--mono); font-size: var(--step--1);
+  box-shadow: 0 1px 0 var(--rule), 0 18px 40px -28px rgba(18, 26, 34, 0.35);
+}
+.statement header { display: flex; justify-content: space-between; gap: 1rem; color: var(--muted); padding-bottom: 0.9rem; border-bottom: 1px dashed var(--rule); }
+.statement ol { list-style: none; margin: 0; padding: 0.4rem 0; }
+.statement li { display: grid; grid-template-columns: 1fr auto; gap: 0.25rem 1rem; padding: 0.55rem 0; border-bottom: 1px dotted var(--rule); }
+.statement li small { grid-column: 1 / -1; color: var(--muted); font-size: 0.72rem; }
+.statement .was { color: var(--strike); text-decoration: line-through; text-decoration-thickness: 1.5px; font-variant-numeric: tabular-nums; text-align: right; }
+.statement .total { display: grid; grid-template-columns: 1fr auto; gap: 0.35rem 1rem; padding-top: 0.9rem; font-variant-numeric: tabular-nums; }
+.statement .total .was { font-size: var(--step-0); }
+.statement .now { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: baseline; gap: 1rem;
+  margin-top: 0.5rem; padding: 0.75rem 0.9rem; background: var(--accent-soft); color: var(--accent); border-radius: 3px; }
+.statement .now b { font-family: var(--display); font-size: var(--step-2); font-weight: 800; letter-spacing: -0.02em; }
+.statement footer { margin-top: 0.9rem; color: var(--muted); font-size: 0.72rem; line-height: 1.5; }
+
+/* ---- sections ---- */
+section.block .wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); border-top: 1px solid var(--rule); }
+.head { display: grid; grid-template-columns: minmax(0, 18rem) minmax(0, 1fr); gap: 1rem 3rem; margin-bottom: 2rem; }
+.head h2 { font-size: var(--step-2); line-height: 1.15; }
+.head p { margin: 0; color: var(--muted); max-width: 40rem; }
+
+/* the two kinds */
+.kinds { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+.kind { background: var(--sheet); padding: 1.5rem; display: grid; gap: 0.6rem; align-content: start; min-width: 0; }
+.kind h3 { font-size: var(--step-1); }
+.kind p { margin: 0; color: var(--muted); }
+.kind .swap { font-family: var(--mono); font-size: var(--step--1); padding: 0.6rem 0.75rem; background: var(--chip); border-radius: 3px; overflow-x: auto; white-space: nowrap; }
+.kind .swap s { color: var(--strike); }
+.kind .swap ins { color: var(--accent); text-decoration: none; }
+.kind.infra { background: var(--accent-soft); }
+.kind.app { background: var(--app-soft); }
+.kind.app .eyebrow, .kind.app .swap ins { color: var(--app); }
+.kind .swap { background: var(--sheet); }
+
+/* ledgers */
+.ledger { border-top: 2px solid var(--ink); }
+#ledgers { display: grid; gap: 2.5rem; }
+.ledger.infra { border-top-color: var(--accent); }
+.ledger.infra > h3 { color: var(--accent); }
+.ledger.app { border-top-color: var(--app); }
+.ledger.app > h3 { color: var(--app); }
+.ledger.app .pill.live { background: var(--app-soft); color: var(--app); }
+.ledger.app .row .name:hover { color: var(--app); }
+.ledger > h3 { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: 0.8rem 0; font-size: var(--step-1); }
+.ledger > h3 span { font-family: var(--mono); font-size: var(--step--1); font-weight: 400; color: var(--muted); }
+.row {
+  display: grid; grid-template-columns: 9.5rem minmax(0, 1.3fr) minmax(0, 1fr) 7.5rem 8.5rem;
+  gap: 0.5rem 1.25rem; align-items: baseline; padding: 0.95rem 0; border-top: 1px solid var(--rule);
+}
+.row.labels { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); padding: 0.5rem 0; }
+.row .name { font-family: var(--display); font-weight: 700; font-size: var(--step-1); text-decoration: none; }
+.row .name:hover { color: var(--accent); }
+.row .what { min-width: 0; }
+.row .what b { font-weight: 600; }
+.row .what div { color: var(--muted); font-size: var(--step--1); }
+.row .use { min-width: 0; font-family: var(--mono); font-size: var(--step--1); color: var(--muted); overflow-wrap: anywhere; }
+.row .floor { font-family: var(--mono); font-size: var(--step--1); font-variant-numeric: tabular-nums; }
+.row .floor s { color: var(--strike); }
+.pill { justify-self: start; font-family: var(--mono); font-size: 0.72rem; padding: 0.2rem 0.55rem; border-radius: 999px; background: var(--chip); color: var(--muted); white-space: nowrap; }
+.pill.live { background: var(--accent-soft); color: var(--accent); }
+.later { margin-top: 1.25rem; font-size: var(--step--1); color: var(--muted); }
+.later b { color: var(--ink); font-weight: 600; }
+
+/* rules */
+.rules { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem 2.5rem; }
+.rule h3 { font-size: var(--step-0); font-family: var(--body); font-weight: 600; letter-spacing: 0; margin-bottom: 0.35rem; }
+.rule p { margin: 0; color: var(--muted); font-size: var(--step--1); line-height: 1.6; }
+.checks { margin: 2.5rem 0 0; padding: 0; list-style: none; counter-reset: c; display: grid; gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+.checks li { counter-increment: c; background: var(--sheet); padding: 1rem 1.25rem 1rem 3.5rem; position: relative; font-size: var(--step--1); color: var(--muted); }
+.checks li::before { content: counter(c); position: absolute; left: 1.25rem; top: 0.95rem; font-family: var(--mono); color: var(--accent); font-weight: 500; }
+.checks li b { color: var(--ink); font-weight: 600; }
+.checks-title { margin-top: 3rem; font-size: var(--step-1); }
+
+/* footer */
+.foot .wrap { border-top: 1px solid var(--rule); padding-block: 2rem 3rem; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; color: var(--muted); font-size: var(--step--1); }
+.foot nav { display: flex; gap: 1.25rem; flex-wrap: wrap; }
+
+@media (max-width: 880px) {
+  .hero .wrap { grid-template-columns: 1fr; }
+  .head { grid-template-columns: 1fr; }
+  .rules { grid-template-columns: 1fr 1fr; }
+  .row { grid-template-columns: 1fr auto; }
+  .row.labels { display: none; }
+  .row .name { grid-column: 1; }
+  .row .pill { grid-column: 2; grid-row: 1; justify-self: end; }
+  .row .what, .row .use, .row .floor { grid-column: 1 / -1; }
+}
+@media (max-width: 560px) {
+  .kinds { grid-template-columns: 1fr; }
+  .rules { grid-template-columns: 1fr; }
+  .bar nav { gap: 0.9rem; }
+  .statement { padding: 1.1rem 1rem 1rem; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .btn, .row .name, a { transition: color 0.15s, background-color 0.15s, border-color 0.15s; }
+}
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="wrap">
+    <a class="mark" href="#top">Idle<span>Free</span></a>
+    <nav aria-label="Sections">
+      <a href="#projects">Projects</a>
+      <a href="#how">How it works</a>
+      <a href="https://github.com/cloudformer">GitHub</a>
+      <a href="https://pypi.org/user/cloudformer/">PyPI</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div class="lede">
+        <div class="eyebrow">Truly free when idle</div>
+        <h1>Cloud services that cost nothing while nobody uses them.</h1>
+        <p>AWS's "serverless" databases, caches and schedulers still bill every hour. IdleFree rebuilds them on
+          Lambda, S3 and DynamoDB, behind the client you already use. You pay per request, and nothing when it's quiet.</p>
+        <div class="cta">
+          <a class="btn primary" href="#projects">See the projects</a>
+          <a class="btn ghost" href="https://github.com/cloudformer/s3rds">Start with s3rds</a>
+        </div>
+      </div>
+
+      <article class="statement" aria-label="Monthly idle cost, before and after">
+        <header><span>IDLE BILL · PER MONTH</span><span>0 requests</span></header>
+        <ol>
+          <li><span>RDS / Aurora Serverless</span><span class="was">~$14–45</span><small>s3rds · SQLite on S3</small></li>
+          <li><span>ElastiCache Serverless (Redis)</span><span class="was">~$90</span><small>dynamoredis · DynamoDB</small></li>
+          <li><span>Managed Airflow (MWAA)</span><span class="was">~$360</span><small>lambdaflow · Lambda + Step Functions</small></li>
+          <li><span>HCP Vault Dedicated</span><span class="was">~$450</span><small>lambdavault · Lambda + S3 + KMS</small></li>
+        </ol>
+        <div class="total">
+          <span>Usual idle floor</span><span class="was">~$914–945</span>
+          <div class="now"><span>With IdleFree</span><b>≈ $0</b></div>
+        </div>
+        <footer>Idle floor = the minimum a service bills with no traffic. With IdleFree you pay per request; S3 storage costs cents.</footer>
+      </article>
+    </div>
+  </section>
+
+  <section class="block" id="kinds">
+    <div class="wrap">
+      <div class="head">
+        <h2>Two kinds of project</h2>
+        <p>Either an AWS service rebuilt behind its standard client, or an existing application moved onto Lambda
+          with its code unchanged. In both cases the switch is one line, and so is the way back.</p>
+      </div>
+      <div class="kinds">
+        <div class="kind infra">
+          <div class="eyebrow">IdleFree Infra</div>
+          <h3>An AWS service, rebuilt</h3>
+          <p>Same client, same API, same error classes. When you outgrow it, the real service is one import away.</p>
+          <div class="swap"><s>import pymysql</s> → <ins>from s3rds import pymysql</ins></div>
+        </div>
+        <div class="kind app">
+          <div class="eyebrow">IdleFree App</div>
+          <h3>An application, unchanged, on Lambda</h3>
+          <p>The official release with its own CLI, API and UI. Only the host changes; there is no new client to learn.</p>
+          <div class="swap"><s>VAULT_ADDR=https://vault.internal</s> → <ins>VAULT_ADDR=&lt;Function URL&gt;</ins></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="projects">
+    <div class="wrap">
+      <div class="head">
+        <h2>Projects</h2>
+        <p>Each one deploys into your own AWS account with one <code>terraform apply</code>. Each has its own
+          compatibility report, generated by its test run.</p>
+      </div>
+
+      <div id="ledgers" aria-live="polite"><p class="later">Loading projects…</p></div>
+    </div>
+  </section>
+
+  <section class="block" id="how">
+    <div class="wrap">
+      <div class="head">
+        <h2>How every project works</h2>
+        <p>Every project follows the same rules, so if you know one, you know them all.</p>
+      </div>
+      <div class="rules">
+        <div class="rule"><h3>≈ $0 when idle</h3><p>Only pay-per-request primitives: S3, DynamoDB, SQS, Lambda, Step Functions, EventBridge. Nothing runs, polls or is provisioned while nobody uses it.</p></div>
+        <div class="rule"><h3>The client you already have</h3><p>pymysql, redis-py, Airflow, redshift_connector, the vault CLI. Moving to the real service later is one import or one URL.</p></div>
+        <div class="rule"><h3>Only tested features count</h3><p>Every feature runs on the real service and on the project, and the results are compared. The report is regenerated by every test run.</p></div>
+        <div class="rule"><h3>Refused, never silently different</h3><p>What needs a real server raises NotSupportedError with the reason, and MIGRATION.md says when to move.</p></div>
+        <div class="rule"><h3>Your account, one command</h3><p>Terraform from the first release, least-privilege IAM, arm64 and x86_64. Destroy removes everything.</p></div>
+        <div class="rule"><h3>Built for the long tail</h3><p>MVPs, side projects, dev and staging: small, idle most of the time. Not a replacement for a busy production cluster.</p></div>
+      </div>
+
+      <h3 class="checks-title">Before a project starts: three checks</h3>
+      <ol class="checks">
+        <li><b>AWS's own service bills while idle.</b> If it scales to zero, or a lasting free tier covers small use, there is nothing to rebuild.</li>
+        <li><b>No pay-per-use AWS service is a small switch away.</b> If SQS or Athena already does the job, use it instead of imitating an old API on top of it.</li>
+        <li><b>Never dress one AWS service up as another product.</b> SQS stays SQS. A project rebuilds a service that bills while idle, behind the client its users already have.</li>
+      </ol>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span>IdleFree · MIT licensed · by cloudformer</span>
+    <nav aria-label="Elsewhere">
+      <a href="https://github.com/cloudformer">github.com/cloudformer</a>
+      <a href="https://github.com/topics/idlefree">#idlefree</a>
+      <a href="https://pypi.org/project/idlefree/">pypi.org/project/idlefree</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+/* The two project tables come from projects.json (next to this page): the only place projects are maintained.
+   Each section: id ("infra" | "app": its color), title, subtitle, columns (5 labels), projects, optional next.
+   Each project: name, url, what, built_on, use, was (struck out), now (optional), status, live (green pill). */
+(function () {
+  var root = document.getElementById("ledgers");
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null) e.textContent = text;
+    return e;
+  }
+  function section(sec) {
+    var box = el("div", "ledger " + (sec.id || ""));
+    box.setAttribute("aria-label", sec.title + " projects");
+    var h = el("h3", null, sec.title + " ");
+    if (sec.subtitle) h.appendChild(el("span", null, sec.subtitle));
+    box.appendChild(h);
+    var labels = el("div", "row labels");
+    labels.setAttribute("aria-hidden", "true");
+    (sec.columns || []).forEach(function (c) { labels.appendChild(el("span", null, c)); });
+    box.appendChild(labels);
+    (sec.projects || []).forEach(function (p) {
+      var row = el("div", "row");
+      var name = el("a", "name", p.name);
+      name.href = p.url || "#";
+      row.appendChild(name);
+      var what = el("div", "what");
+      what.appendChild(el("b", null, p.what || ""));
+      if (p.built_on) what.appendChild(el("div", null, p.built_on));
+      row.appendChild(what);
+      row.appendChild(el("div", "use", p.use || ""));
+      var floor = el("div", "floor");
+      if (p.was) floor.appendChild(el("s", null, p.was));
+      if (p.now) floor.appendChild(document.createTextNode(" → " + p.now));
+      row.appendChild(floor);
+      row.appendChild(el("span", "pill" + (p.live ? " live" : ""), p.status || ""));
+      box.appendChild(row);
+    });
+    if (sec.next) {
+      var next = el("p", "later");
+      next.appendChild(el("b", null, "Next: "));
+      next.appendChild(document.createTextNode(sec.next));
+      box.appendChild(next);
+    }
+    return box;
+  }
+  fetch("projects.json", { cache: "no-cache" })
+    .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+    .then(function (data) {
+      root.textContent = "";
+      (data.sections || []).forEach(function (sec) { root.appendChild(section(sec)); });
+    })
+    .catch(function (e) {
+      root.textContent = "";
+      root.appendChild(el("p", "later", "The project list could not be loaded (" + e.message + "). See github.com/cloudformer."));
+    });
+})();
+</script>
+</body>
+</html>

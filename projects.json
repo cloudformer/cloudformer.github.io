@@ -1,0 +1,95 @@
+{
+  "sections": [
+    {
+      "id": "infra",
+      "title": "IdleFree Infra",
+      "subtitle": "an AWS service, rebuilt",
+      "columns": ["Project", "Replaces · built on", "Use it", "Idle floor", "Status"],
+      "projects": [
+        {
+          "name": "s3rds",
+          "url": "https://github.com/cloudformer/s3rds",
+          "what": "RDS / Aurora Serverless",
+          "built_on": "S3 + Lambda (SQLite)",
+          "use": "from s3rds import pymysql · SQLAlchemy · Django",
+          "was": "~$14–45",
+          "now": "$0",
+          "status": "0.2.1 on PyPI",
+          "live": true
+        },
+        {
+          "name": "dynamoredis",
+          "url": "https://github.com/cloudformer/dynamoredis",
+          "what": "ElastiCache (Redis)",
+          "built_on": "DynamoDB",
+          "use": "from dynamoredis import redis",
+          "was": "~$90",
+          "now": "$0",
+          "status": "0.1.2 on PyPI",
+          "live": true
+        },
+        {
+          "name": "lambdaflow",
+          "url": "https://github.com/cloudformer/lambdaflow",
+          "what": "Airflow / MWAA",
+          "built_on": "Lambda + EventBridge + Step Functions",
+          "use": "from lambdaflow import airflow",
+          "was": "~$360",
+          "now": "$0",
+          "status": "0.1.0 on PyPI",
+          "live": true
+        },
+        {
+          "name": "s3shift",
+          "url": "https://github.com/cloudformer/s3shift",
+          "what": "Redshift Serverless",
+          "built_on": "Lambda + DuckDB over your S3 and RDS data",
+          "use": "from s3shift import redshift_connector",
+          "was": "~$3 / h awake",
+          "now": "$0",
+          "status": "0.1.1 on PyPI",
+          "live": true
+        }
+      ],
+      "next": "s3mongo (DocumentDB / MongoDB on s3rds) is planned · ztna (Client VPN → IAM + Session Manager) has its name reserved."
+    },
+    {
+      "id": "app",
+      "title": "IdleFree App",
+      "subtitle": "an application, unchanged, on Lambda",
+      "columns": ["Project", "Application · built on", "Only change", "Usually runs on", "Status"],
+      "projects": [
+        {
+          "name": "lambdavault",
+          "url": "https://github.com/cloudformer/lambdavault",
+          "what": "HashiCorp Vault",
+          "built_on": "Lambda + S3 + KMS",
+          "use": "vault CLI, Terraform provider, UI: only VAULT_ADDR",
+          "was": "~$450 HCP",
+          "status": "0.1.0 on PyPI",
+          "live": true
+        },
+        {
+          "name": "lambdachecks",
+          "url": "https://github.com/cloudformer/lambdachecks",
+          "what": "Healthchecks (cron monitoring)",
+          "built_on": "Lambda + s3rds, deployed together",
+          "use": "ping URLs, API, UI: only the host",
+          "was": "a VM + a database",
+          "status": "0.1.0 running",
+          "live": true
+        },
+        {
+          "name": "s3keepass",
+          "url": "https://github.com/cloudformer/s3keepass",
+          "what": "KeePass vaults",
+          "built_on": "Lambda + S3 (SSE-KMS)",
+          "use": "a web UI over your .kdbx files; KeePassXC still opens them",
+          "was": "a sync service",
+          "status": "in progress",
+          "live": false
+        }
+      ]
+    }
+  ]
+}
