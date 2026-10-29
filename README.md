@@ -4,7 +4,8 @@ The IdleFree homepage: https://cloudformer.github.io/
 
 - `index.html` — the page (no build step, no framework).
 - `projects.json` — the two project tables (IdleFree Infra, IdleFree App). **The only file to edit** when a project
-  is added, renamed or released: each project has `name`, `url`, `what`, `built_on`, `use`, `was` (idle cost,
+  is added, renamed or released: each project has `name`, `url`, `diagram`
+  (architecture image, previewed on hover), `what`, `built_on`, `use`, `was` (idle cost,
   struck out), optional `now`, `status` and `live` (green pill). A section's `id` (`infra` / `app`) picks its color.
 - `.nojekyll` — serve the files as they are.
 

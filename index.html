@@ -148,16 +148,34 @@ section.block .wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); border-top: 1px
 .ledger.app { border-top-color: var(--app); }
 .ledger.app > h3 { color: var(--app); }
 .ledger.app .pill.live { background: var(--app-soft); color: var(--app); }
-.ledger.app .row .name:hover { color: var(--app); }
 .ledger > h3 { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: 0.8rem 0; font-size: var(--step-1); }
 .ledger > h3 span { font-family: var(--mono); font-size: var(--step--1); font-weight: 400; color: var(--muted); }
 .row {
   display: grid; grid-template-columns: 9.5rem minmax(0, 1.3fr) minmax(0, 1fr) 7.5rem 8.5rem;
   gap: 0.5rem 1.25rem; align-items: baseline; padding: 0.95rem 0; border-top: 1px solid var(--rule);
 }
-.row.labels { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); padding: 0.5rem 0; }
-.row .name { font-family: var(--display); font-weight: 700; font-size: var(--step-1); text-decoration: none; }
-.row .name:hover { color: var(--accent); }
+.row.labels { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); padding-block: 0.5rem; }
+.row .namecell { position: relative; min-width: 0; }
+.row .name {
+  display: inline-block; font-family: var(--display); font-weight: 700; font-size: var(--step-1); color: var(--ink);
+  text-decoration: underline; text-decoration-thickness: 1px; text-decoration-color: var(--rule);
+  text-underline-offset: 4px; transform-origin: left center;
+}
+.row .name::after { content: "\2197"; font-size: 0.7em; margin-left: 0.2em; color: var(--muted); }
+.row .name:hover, .row .name:focus-visible { transform: scale(1.08); }
+/* the architecture preview: shown while the name is hovered or focused; scaling and the preview never move the layout */
+.preview {
+  position: absolute; left: 0; top: calc(100% + 10px); z-index: 20; margin: 0;
+  width: min(30rem, calc(100vw - 32px)); padding: 0.6rem;
+  background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px;
+  box-shadow: 0 20px 44px -22px rgba(18, 26, 34, 0.5);
+  opacity: 0; visibility: hidden; pointer-events: none;
+}
+.preview.up { top: auto; bottom: calc(100% + 10px); }
+.preview img { display: block; width: 100%; height: auto; border-radius: 3px; }
+.preview figcaption { margin-top: 0.45rem; font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+.row .name:hover + .preview, .row .name:focus-visible + .preview { opacity: 1; visibility: visible; }
+@media (hover: none) { .preview { display: none; } }
 .row .what { min-width: 0; }
 .row .what b { font-weight: 600; }
 .row .what div { color: var(--muted); font-size: var(--step--1); }
@@ -189,7 +207,7 @@ section.block .wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); border-top: 1px
   .rules { grid-template-columns: 1fr 1fr; }
   .row { grid-template-columns: 1fr auto; }
   .row.labels { display: none; }
-  .row .name { grid-column: 1; }
+  .row .namecell { grid-column: 1; }
   .row .pill { grid-column: 2; grid-row: 1; justify-self: end; }
   .row .what, .row .use, .row .floor { grid-column: 1 / -1; }
 }
@@ -200,7 +218,9 @@ section.block .wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); border-top: 1px
   .statement { padding: 1.1rem 1rem 1rem; }
 }
 @media (prefers-reduced-motion: no-preference) {
-  .btn, .row .name, a { transition: color 0.15s, background-color 0.15s, border-color 0.15s; }
+  .btn, a { transition: color 0.15s, background-color 0.15s, border-color 0.15s; }
+  .row .name { transition: transform 0.15s; }
+  .preview { transition: opacity 0.15s, visibility 0.15s; }
 }
 </style>
 </head>
@@ -323,7 +343,8 @@ section.block .wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); border-top: 1px
 <script>
 /* The two project tables come from projects.json (next to this page): the only place projects are maintained.
    Each section: id ("infra" | "app": its color), title, subtitle, columns (5 labels), projects, optional next.
-   Each project: name, url, what, built_on, use, was (struck out), now (optional), status, live (green pill). */
+   Each project: name, url, diagram (architecture image, shown on hover), what, built_on, use, was (struck out),
+   now (optional), status, live (green pill). */
 (function () {
   var root = document.getElementById("ledgers");
   function el(tag, cls, text) {
@@ -344,9 +365,26 @@ section.block .wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); border-top: 1px
     box.appendChild(labels);
     (sec.projects || []).forEach(function (p) {
       var row = el("div", "row");
+      var cell = el("div", "namecell");
       var name = el("a", "name", p.name);
       name.href = p.url || "#";
-      row.appendChild(name);
+      cell.appendChild(name);
+      if (p.diagram) {
+        var fig = el("figure", "preview");
+        var img = el("img");
+        img.src = p.diagram;
+        img.alt = p.name + " architecture";
+        img.loading = "lazy";
+        fig.appendChild(img);
+        fig.appendChild(el("figcaption", null, p.name + " · architecture"));
+        cell.appendChild(fig);
+        var flip = function () {   // open upward when there is no room below
+          fig.classList.toggle("up", window.innerHeight - name.getBoundingClientRect().bottom < 340);
+        };
+        name.addEventListener("mouseenter", flip);
+        name.addEventListener("focus", flip);
+      }
+      row.appendChild(cell);
       var what = el("div", "what");
       what.appendChild(el("b", null, p.what || ""));
       if (p.built_on) what.appendChild(el("div", null, p.built_on));
