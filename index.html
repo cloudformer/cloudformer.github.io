@@ -9,31 +9,14 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: a billing-statement hero (the idle bill, struck to $0), then the catalogue as two ledgers (Infra, App), then the rules. */
 :root {
-  --paper: #f2f4f6;      /* page */
-  --sheet: #ffffff;      /* the statement and ledger surfaces */
-  --ink: #121a22;        /* text */
-  --muted: #5b6874;      /* secondary text, slightly blue-biased grey */
-  --rule: #d6dce2;       /* hairlines */
-  --accent: #0a6e5c;     /* the $0: deep meter green */
-  --accent-soft: #e0f0ec;
-  --strike: #b4372f;     /* the idle bill being struck out */
-  --chip: #e8ecf0;
-  --app: #9a5b0b;        /* IdleFree App: amber, Infra keeps the meter green */
-  --app-soft: #f7ecda;
-  --tint: #e8f1ee;       /* hero band */
-  --grid: rgba(10, 110, 92, 0.07);
-
-  --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
-  --body: "IBM Plex Sans", "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
-  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, "PingFang SC", "Microsoft YaHei", "Noto Sans SC", monospace;
-
-  --step--1: 0.8125rem;
-  --step-0: 1rem;
-  --step-1: 1.25rem;
-  --step-2: 1.75rem;
-  --step-3: clamp(2.25rem, 1.4rem + 3.6vw, 3.75rem);
+  --accent-soft-2: #cfe7e0; --app-soft-2: #f1e0c4; --sheet-2: #eef2f4;
+  --paper: #f2f4f6; --sheet: #ffffff; --ink: #121a22; --muted: #5b6874; --rule: #d6dce2;
+  --accent: #0a6e5c; --accent-soft: #e0f0ec; --strike: #b4372f; --chip: #e8ecf0;
+  --app: #9a5b0b; --app-soft: #f7ecda; --tint: #e8f1ee; --grid: rgba(10, 110, 92, 0.07);
+  --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --body: "IBM Plex Sans", "Helvetica Neue", Arial, system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
   --wrap: 72rem;
 }
 @media (prefers-color-scheme: dark) {
@@ -41,6 +24,7 @@
     --paper: #0e1418; --sheet: #151d23; --ink: #e6ecf0; --muted: #93a1ad; --rule: #26323b;
     --accent: #4fd1b0; --accent-soft: #143430; --strike: #f0857a; --chip: #1e2a32;
     --app: #f2b35c; --app-soft: #33281a; --tint: #11201f; --grid: rgba(79, 209, 176, 0.06);
+    --accent-soft-2: #1a403a; --app-soft-2: #3e3120; --sheet-2: #1b252c;
     color-scheme: dark;
   }
 }
@@ -48,198 +32,164 @@
   --paper: #0e1418; --sheet: #151d23; --ink: #e6ecf0; --muted: #93a1ad; --rule: #26323b;
   --accent: #4fd1b0; --accent-soft: #143430; --strike: #f0857a; --chip: #1e2a32;
   --app: #f2b35c; --app-soft: #33281a; --tint: #11201f; --grid: rgba(79, 209, 176, 0.06);
+  --accent-soft-2: #1a403a; --app-soft-2: #3e3120; --sheet-2: #1b252c;
   color-scheme: dark;
 }
-
 * { box-sizing: border-box; }
-body {
-  margin: 0;
-  background: var(--paper);
-  color: var(--ink);
-  font: 400 var(--step-0)/1.6 var(--body);
-  -webkit-font-smoothing: antialiased;
-}
-a { color: inherit; text-decoration-color: var(--rule); text-underline-offset: 3px; }
-a:hover { text-decoration-color: var(--accent); }
-a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 400 1rem/1.6 var(--body); -webkit-font-smoothing: antialiased; }
+a { color: inherit; text-underline-offset: 3px; }
 code { font-family: var(--mono); font-size: 0.9em; }
-h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
-
-.wrap {
-  max-width: var(--wrap);
-  margin: 0 auto;
-  padding-left: max(16px, env(safe-area-inset-left, 0px));
-  padding-right: max(16px, env(safe-area-inset-right, 0px));
-}
-
-/* ---- top bar ---- */
-.bar { border-bottom: 1px solid var(--rule); }
-.bar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 0.9rem; }
-.mark { font-family: var(--display); font-weight: 800; font-size: var(--step-1); text-decoration: none; letter-spacing: -0.02em; }
+h1, h2, h3 { font-family: var(--display); margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+.wrap { max-width: var(--wrap); margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.bar { position: sticky; top: 0; z-index: 50; background: var(--paper); border-bottom: 1px solid var(--rule); }
+.bar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 0.8rem; }
+.mark { font-family: var(--display); font-weight: 800; font-size: 1.5rem; text-decoration: none; letter-spacing: -0.02em; }
 .mark span { color: var(--accent); }
-.bar nav { display: flex; gap: 1.25rem; font-size: var(--step--1); flex-wrap: wrap; }
-.bar nav a { text-decoration: none; color: var(--muted); }
-.bar nav a:hover { color: var(--ink); }
-.bar nav { align-items: center; }
-.lang {
-  font: 500 var(--step--1)/1 var(--body); color: var(--ink); background: transparent; cursor: pointer;
-  border: 1px solid var(--rule); border-radius: 4px; padding: 0.35rem 0.6rem;
-}
-.lang:hover { border-color: var(--ink); }
+.bar nav { display: flex; gap: 0.7rem; font-size: 1.0625rem; font-weight: 600; flex-wrap: wrap; align-items: center; }
+.bar nav a { display: inline-flex; align-items: center; gap: 0.55rem; text-decoration: none; padding: 0.5rem 0.65rem 0.5rem 1rem;
+  border-radius: 999px; border: 1.5px solid; transition: transform .15s, background-color .15s, color .15s; }
+.bar nav a b { font: 600 0.78rem/1 var(--mono); min-width: 1.6rem; padding: 0.3rem 0.45rem; border-radius: 999px; text-align: center; }
+.bar nav a.infra { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+.bar nav a.infra b { background: var(--accent); color: var(--sheet); }
+.bar nav a.app { color: var(--app); border-color: var(--app); background: var(--app-soft); }
+.bar nav a.app b { background: var(--app); color: var(--sheet); }
+.bar nav a:hover { transform: translateY(-1px); }
+.bar nav a.infra:hover { background: var(--accent); color: var(--sheet); }
+.bar nav a.app:hover { background: var(--app); color: var(--sheet); }
+.bar nav a:hover b { background: var(--sheet); }
+.bar nav a.infra:hover b { color: var(--accent); } .bar nav a.app:hover b { color: var(--app); }
+@media (max-width: 560px) { .bar nav .pre { display: none; } .bar nav a { padding: 0.4rem 0.5rem 0.4rem 0.8rem; font-size: 0.95rem; } }
+.eyebrow { font-family: var(--mono); font-size: 0.8125rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+.btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.2rem; font: 600 0.95rem/1 var(--body); text-decoration: none; border-radius: 6px; border: 1px solid var(--ink); }
+.btn.infra { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn.app { background: var(--app); border-color: var(--app); color: #fff; }
+.btn:hover { filter: brightness(1.1); }
+.pill { font-family: var(--mono); font-size: 0.72rem; padding: 0.2rem 0.55rem; border-radius: 999px; background: var(--chip); color: var(--muted); white-space: nowrap; }
+.infra .pill.live { background: var(--accent-soft); color: var(--accent); }
+.app .pill.live { background: var(--app-soft); color: var(--app); }
+.price s { color: var(--strike); }
+.links { display: flex; gap: 0.9rem; font-size: 0.85rem; font-weight: 500; }
+.links a { color: var(--muted); }
+.links a:hover { color: var(--ink); }
+.diagram { display: block; width: 100%; height: 100%; object-fit: contain; background: var(--sheet); }
+section.block { scroll-margin-top: 4.5rem; }
+.later { margin-top: 1.25rem; font-size: 0.85rem; color: var(--muted); }
+.later b { color: var(--ink); }
+.foot .wrap { border-top: 1px solid var(--rule); padding-block: 2rem 3rem; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; color: var(--muted); font-size: 0.85rem; }
+.foot nav { display: flex; gap: 1.25rem; flex-wrap: wrap; }
+.rules { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; }
+.rule { background: var(--sheet); border: 1px solid var(--rule); border-radius: 8px; padding: 1.25rem; }
+.rule .ico { width: 2.4rem; height: 2.4rem; border-radius: 50%; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); font: 700 1.05rem/1 var(--display); margin-bottom: 0.7rem; }
+.rule h3 { font: 600 1rem/1.3 var(--body); margin-bottom: 0.3rem; }
+.rule p { margin: 0; color: var(--muted); font-size: 0.875rem; }
+@media (max-width: 880px) { .rules { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .rules { grid-template-columns: 1fr; } .bar nav { gap: 0.9rem; font-size: 0.95rem; } }
+
+.hero { background-color: var(--tint); background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 32px 32px; border-bottom: 1px solid var(--rule); }
+.hero .wrap { padding-block: 2rem 2.25rem; display: grid; gap: 1.1rem; }
+.hero h1 { font-size: clamp(1.9rem, 1.2rem + 2.2vw, 2.7rem); line-height: 1.08; max-width: 44rem; }
+.hero p { margin: 0; color: var(--muted); max-width: 44rem; font-size: 1.02rem; }
+.me { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+.me img { width: 2.75rem; height: 2.75rem; border-radius: 50%; border: 2px solid var(--sheet); box-shadow: 0 0 0 1px var(--rule); }
+.me b { font: 700 1.05rem/1.2 var(--display); display: block; } .me span { color: var(--muted); font-size: 0.82rem; }
+.doors { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+.door { display: grid; gap: 0.6rem; padding: 1.3rem 1.4rem; border-radius: 12px; text-decoration: none; border: 2px solid transparent; transition: transform .15s; align-content: start; }
+.door:hover { transform: translateY(-3px); }
+.door.infra { background: var(--accent-soft); border-color: var(--accent); } .door.app { background: var(--app-soft); border-color: var(--app); }
+.door h2 { font-size: 1.5rem; display: flex; justify-content: space-between; }
+.door.infra h2 { color: var(--accent); } .door.app h2 { color: var(--app); }
+.door p { margin: 0; color: var(--muted); }
+.names { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.names span { font: 600 0.85rem/1 var(--mono); background: var(--sheet); padding: 0.4rem 0.6rem; border-radius: 6px; }
+.cat .wrap { padding-block: 2.25rem 0.5rem; } .cat h2 { font-size: 1.5rem; padding-bottom: 0.6rem; border-bottom: 2px solid; }
+.cat.infra h2 { color: var(--accent); } .cat.app h2 { color: var(--app); }
+.thumb { display: block; border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; background: var(--sheet); padding: 2px; }
+.thumb img { transition: transform .2s; } .thumb:hover img { transform: scale(1.04); }
+.line { display: grid; grid-template-columns: 9rem 9rem minmax(0, 1fr) 12rem 8.5rem; gap: 1.1rem; align-items: center; padding: 0.9rem 0; border-bottom: 1px solid var(--rule); }
+.line .thumb { height: 64px; }
+.line .name { font: 700 1.2rem/1.2 var(--display); text-decoration: none; }
+.line .on { color: var(--muted); font-size: 0.85rem; } .line .price { font-family: var(--mono); font-size: 0.82rem; }
+.line .side { display: grid; gap: 0.4rem; justify-items: start; }
+.stars { font: 500 0.78rem/1 var(--mono); color: var(--muted); }
+.extra .wrap { padding-block: 3.25rem 3.5rem; }
+.extra h2 { font-size: 1.75rem; } .extra .sub { color: var(--muted); margin: 0.3rem 0 1.6rem; max-width: 44rem; }
+@media (max-width: 880px) { .doors { grid-template-columns: 1fr; } .line { grid-template-columns: 7rem minmax(0, 1fr); } .line .price, .line .side { grid-column: 2; } .line .thumb { grid-row: span 3; } }
+
+.thumb { position: relative; overflow: visible; }
+.thumb .clip { display: block; width: 100%; height: 100%; overflow: hidden; border-radius: 4px; }
+.preview { position: absolute; left: 0; top: calc(100% + 10px); z-index: 30; width: min(34rem, calc(100vw - 32px)); padding: 0.6rem;
+  background: var(--sheet); border: 1px solid var(--rule); border-radius: 8px; box-shadow: 0 24px 48px -22px rgba(18,26,34,.55);
+  opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .15s, visibility .15s; }
+.preview.up { top: auto; bottom: calc(100% + 10px); }
+.preview img { display: block; width: 100%; height: auto; border-radius: 4px; }
+.preview span { display: block; margin-top: 0.4rem; font: 0.72rem/1 var(--mono); color: var(--muted); }
+.thumb:hover .preview, .thumb:focus-visible .preview { opacity: 1; visibility: visible; }
+@media (hover: none) { .preview { display: none; } }
+.block2 .wrap { padding-block: 3rem; }
+.block2 h2 { font-size: 1.6rem; } .block2 .sub { color: var(--muted); margin: 0.3rem 0 1.4rem; max-width: 44rem; }
+/* idle cost */
+.costs { display: grid; gap: 0.7rem; }
+.cost { display: grid; grid-template-columns: minmax(0, 15rem) minmax(0, 1fr) auto; gap: 1rem; align-items: center; }
+.cost .svc b { display: block; } .cost .svc span { color: var(--muted); font-size: 0.82rem; }
+.cost .track { height: 12px; background: var(--chip); border-radius: 999px; overflow: hidden; }
+.cost .track i { display: block; height: 100%; background: var(--strike); border-radius: 999px; }
+.cost .amt { font-family: var(--mono); font-size: 0.9rem; white-space: nowrap; }
+.cost .amt s { color: var(--strike); } .cost .amt b { color: var(--accent); }
+/* deploy / install / code */
+.ship { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+.ship a { text-decoration: none; background: var(--sheet); border: 1px solid var(--rule); border-radius: 10px; padding: 1.1rem 1.2rem; display: grid; gap: 0.3rem; transition: transform .15s, border-color .15s; }
+.ship a:hover { transform: translateY(-2px); border-color: var(--accent); }
+.ship small { font: 500 0.72rem/1 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
+.ship b { font: 700 1.15rem/1.3 var(--display); } .ship span { color: var(--muted); font-size: 0.85rem; }
+/* live summary */
+.kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
+.kpi { background: var(--sheet); border: 1px solid var(--rule); border-radius: 10px; padding: 1rem 1.2rem; }
+.kpi b { display: block; font: 800 2rem/1.1 var(--display); color: var(--accent); } .kpi span { color: var(--muted); font-size: 0.85rem; }
+@media (max-width: 880px) { .ship, .kpis { grid-template-columns: 1fr 1fr; } .cost { grid-template-columns: 1fr auto; } .cost .track { grid-column: 1 / -1; grid-row: 2; } }
+
+/* profile card: a box that reads as a link, lifts on hover */
+.me { display: inline-flex; align-items: center; gap: 0.75rem; padding: 0.55rem 0.9rem 0.55rem 0.55rem; background: var(--sheet);
+  border: 1px solid var(--rule); border-radius: 999px; justify-self: start; transition: transform .15s, border-color .15s, box-shadow .15s; }
+.me:hover { transform: translateY(-2px); border-color: var(--accent); box-shadow: 0 10px 24px -16px rgba(18,26,34,.45); }
+.me .go { font: 500 0.8rem/1 var(--mono); color: var(--accent); margin-left: 0.4rem; transition: transform .15s; }
+.me:hover .go { transform: translateX(3px); }
+/* hero: headline left, Get it right */
+.top { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 2rem; align-items: start; }
+.top .lede { display: grid; gap: 1rem; }
+.top .ship { grid-template-columns: 1fr; gap: 0.6rem; }
+.top .ship a { padding: 0.7rem 1rem; grid-template-columns: auto 1fr; column-gap: 0.8rem; align-items: center; }
+.top .ship small { grid-row: span 2; width: 4.4rem; }
+.top .ship b { font-size: 1rem; } .top .ship span { font-size: 0.8rem; }
+.top h3 { font: 600 0.75rem/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.6rem; }
+@media (max-width: 880px) { .top { grid-template-columns: 1fr; } }
+/* idle cost in grey: what it used to cost */
+.cost .track i { background: #a7b0b8; }
+.cost .amt s { color: var(--muted); }
+
+.hero .kpis { margin-top: 0.1rem; } .hero .kpi { padding: 0.7rem 1rem; } .hero .kpi b { font-size: 1.6rem; }
+/* project rows: thumbnail | name | what | idle cost (grey bar, then the money) | status + links */
+.line { grid-template-columns: 9rem 9rem minmax(0, 1fr) 17rem 8.5rem; }
+.idle { display: grid; gap: 0.35rem; }
+.idle .track { height: 10px; background: var(--chip); border-radius: 999px; overflow: hidden; }
+.idle .track i { display: block; height: 100%; background: #a7b0b8; border-radius: 999px; }
+.idle .amt { font-family: var(--mono); font-size: 0.8rem; }
+.idle .amt s { color: var(--muted); } .idle .amt b { color: var(--accent); }
+@media (max-width: 880px) { .line { grid-template-columns: 7rem minmax(0, 1fr); } .line .idle, .line .side { grid-column: 2; } }
+
+
+/* ---- one hover for everything clickable: it eases down 2px and its surface turns a shade darker ---- */
+.bar nav a, .door, .me, .ship a, .lang { transition: transform .2s ease, background-color .2s ease, border-color .2s ease, box-shadow .2s ease; }
+.bar nav a:hover, .door:hover, .me:hover, .ship a:hover, .lang:hover { transform: translateY(2px); box-shadow: none; }
+.bar nav a.infra:hover, .door.infra:hover { background: var(--accent-soft-2); color: var(--accent); }
+.bar nav a.app:hover, .door.app:hover { background: var(--app-soft-2); color: var(--app); }
+.bar nav a.infra:hover b { background: var(--accent); color: var(--sheet); }
+.bar nav a.app:hover b { background: var(--app); color: var(--sheet); }
+.me:hover, .ship a:hover { background: var(--sheet-2); border-color: var(--accent); }
+.lang { font: 600 0.95rem/1 var(--body); color: var(--ink); background: var(--sheet); cursor: pointer; border: 1.5px solid var(--rule); border-radius: 999px; padding: 0.55rem 0.9rem; }
+.lang:hover { background: var(--sheet-2); border-color: var(--ink); }
 .lang:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 :lang(zh) .hero h1 { line-height: 1.2; letter-spacing: 0; }
-:lang(zh) .eyebrow, :lang(zh) .row.labels { letter-spacing: 0.02em; }
-
-/* ---- hero ---- */
-.hero {
-  background-color: var(--tint);
-  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-  background-size: 32px 32px;
-  border-bottom: 1px solid var(--rule);
-}
-.hero .wrap { display: grid; grid-template-columns: 1.1fr 1fr; gap: clamp(2rem, 5vw, 4.5rem); align-items: center; padding-block: clamp(2.5rem, 7vw, 5.5rem); }
-.hero .lede { min-width: 0; display: grid; gap: 1.25rem; }
-.eyebrow { font-family: var(--mono); font-size: var(--step--1); letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
-.hero h1 { font-size: var(--step-3); line-height: 1.04; font-weight: 800; }
-.hero p { margin: 0; max-width: 34rem; color: var(--muted); font-size: var(--step-1); line-height: 1.5; }
-.cta { display: flex; gap: 0.75rem; flex-wrap: wrap; }
-.btn {
-  display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.7rem 1.1rem;
-  font: 500 var(--step--1)/1 var(--body); text-decoration: none; border-radius: 6px;
-  border: 1px solid var(--ink);
-}
-.btn.primary { background: var(--ink); color: var(--paper); }
-.btn.primary:hover { background: var(--accent); border-color: var(--accent); }
-.btn.ghost:hover { border-color: var(--accent); color: var(--accent); }
-
-/* the statement: the page's one bold element */
-.statement {
-  min-width: 0; background: var(--sheet); border: 1px solid var(--rule); border-radius: 4px;
-  padding: 1.5rem 1.5rem 1.25rem; font-family: var(--mono); font-size: var(--step--1);
-  box-shadow: 0 1px 0 var(--rule), 0 18px 40px -28px rgba(18, 26, 34, 0.35);
-}
-.statement header { display: flex; justify-content: space-between; gap: 1rem; color: var(--muted); padding-bottom: 0.9rem; border-bottom: 1px dashed var(--rule); }
-.statement ol { list-style: none; margin: 0; padding: 0.4rem 0; }
-.statement li { display: grid; grid-template-columns: 1fr auto; gap: 0.25rem 1rem; padding: 0.55rem 0; border-bottom: 1px dotted var(--rule); }
-.statement li small { grid-column: 1 / -1; color: var(--muted); font-size: 0.72rem; }
-.statement .was { color: var(--strike); text-decoration: line-through; text-decoration-thickness: 1.5px; font-variant-numeric: tabular-nums; text-align: right; }
-.statement .total { display: grid; grid-template-columns: 1fr auto; gap: 0.35rem 1rem; padding-top: 0.9rem; font-variant-numeric: tabular-nums; }
-.statement .total .was { font-size: var(--step-0); }
-.statement .now { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: baseline; gap: 1rem;
-  margin-top: 0.5rem; padding: 0.75rem 0.9rem; background: var(--accent-soft); color: var(--accent); border-radius: 3px; }
-.statement .now b { font-family: var(--display); font-size: var(--step-2); font-weight: 800; letter-spacing: -0.02em; }
-.statement footer { margin-top: 0.9rem; color: var(--muted); font-size: 0.72rem; line-height: 1.5; }
-
-/* ---- sections ---- */
-section.block .wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); border-top: 1px solid var(--rule); }
-.head { display: grid; grid-template-columns: minmax(0, 18rem) minmax(0, 1fr); gap: 1rem 3rem; margin-bottom: 2rem; }
-.head h2 { font-size: var(--step-2); line-height: 1.15; }
-.head p { margin: 0; color: var(--muted); max-width: 40rem; }
-
-/* the two kinds */
-.kinds { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
-.kind { background: var(--sheet); padding: 1.5rem; display: grid; gap: 0.6rem; align-content: start; min-width: 0; }
-.kind h3 { font-size: var(--step-1); }
-.kind p { margin: 0; color: var(--muted); }
-.kind .swap { font-family: var(--mono); font-size: var(--step--1); padding: 0.6rem 0.75rem; background: var(--chip); border-radius: 3px; overflow-x: auto; white-space: nowrap; }
-.kind .swap s { color: var(--strike); }
-.kind .swap ins { color: var(--accent); text-decoration: none; }
-.kind.infra { background: var(--accent-soft); }
-.kind.app { background: var(--app-soft); }
-.kind.app .eyebrow, .kind.app .swap ins { color: var(--app); }
-.kind .swap { background: var(--sheet); }
-
-/* ledgers */
-.ledger { border-top: 2px solid var(--ink); }
-#ledgers { display: grid; gap: 2.5rem; }
-.ledger.infra { border-top-color: var(--accent); }
-.ledger.infra > h3 { color: var(--accent); }
-.ledger.app { border-top-color: var(--app); }
-.ledger.app > h3 { color: var(--app); }
-.ledger.app .pill.live { background: var(--app-soft); color: var(--app); }
-.ledger > h3 { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: 0.8rem 0; font-size: var(--step-1); }
-.ledger > h3 span { font-family: var(--mono); font-size: var(--step--1); font-weight: 400; color: var(--muted); }
-.row {
-  display: grid; grid-template-columns: 9.5rem minmax(0, 1.3fr) minmax(0, 1fr) 7.5rem 8.5rem;
-  gap: 0.5rem 1.25rem; align-items: baseline; padding: 0.95rem 0; border-top: 1px solid var(--rule);
-}
-.ledger.has-demo .row { grid-template-columns: 9.5rem minmax(0, 1.3fr) minmax(0, 1fr) 7.5rem 8.5rem 6.5rem; }
-.row .demo { font-size: var(--step--1); font-weight: 500; white-space: nowrap; text-decoration: underline; text-decoration-color: var(--rule); text-underline-offset: 4px; }
-.row .demo:hover { text-decoration-color: currentColor; }
-.row .nodemo { color: var(--muted); font-size: var(--step--1); white-space: nowrap; }
-.row.labels { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); padding-block: 0.5rem; }
-.row .namecell { position: relative; min-width: 0; }
-.row .name {
-  display: inline-block; font-family: var(--display); font-weight: 700; font-size: var(--step-1); color: var(--ink);
-  text-decoration: underline; text-decoration-thickness: 1px; text-decoration-color: var(--rule);
-  text-underline-offset: 4px; transform-origin: left center;
-}
-.row .name::after { content: "\2197"; font-size: 0.7em; margin-left: 0.2em; color: var(--muted); }
-.row .name:hover, .row .name:focus-visible { transform: scale(1.08); }
-/* the architecture preview: shown while the name is hovered or focused; scaling and the preview never move the layout */
-.preview {
-  position: absolute; left: 0; top: calc(100% + 10px); z-index: 20; margin: 0;
-  width: min(30rem, calc(100vw - 32px)); padding: 0.6rem;
-  background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px;
-  box-shadow: 0 20px 44px -22px rgba(18, 26, 34, 0.5);
-  opacity: 0; visibility: hidden; pointer-events: none;
-}
-.preview.up { top: auto; bottom: calc(100% + 10px); }
-.preview img { display: block; width: 100%; height: auto; border-radius: 3px; }
-.preview figcaption { margin-top: 0.45rem; font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
-.row .name:hover + .preview, .row .name:focus-visible + .preview { opacity: 1; visibility: visible; }
-.diagram-link { display: none; }
-/* touch screens have no hover: the preview gives way to a link to the diagram itself */
-@media (hover: none) {
-  .preview { display: none; }
-  .diagram-link { display: inline-block; margin-top: 0.2rem; font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
-}
-.row .what { min-width: 0; }
-.row .what b { font-weight: 600; }
-.row .what div { color: var(--muted); font-size: var(--step--1); }
-.row .use { min-width: 0; font-family: var(--mono); font-size: var(--step--1); color: var(--muted); overflow-wrap: anywhere; }
-.row .floor { font-family: var(--mono); font-size: var(--step--1); font-variant-numeric: tabular-nums; }
-.row .floor s { color: var(--strike); }
-.pill { justify-self: start; font-family: var(--mono); font-size: 0.72rem; padding: 0.2rem 0.55rem; border-radius: 999px; background: var(--chip); color: var(--muted); white-space: nowrap; }
-.pill.live { background: var(--accent-soft); color: var(--accent); }
-.later { margin-top: 1.25rem; font-size: var(--step--1); color: var(--muted); }
-.later b { color: var(--ink); font-weight: 600; }
-
-/* rules */
-.rules { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem 2.5rem; }
-.rule h3 { font-size: var(--step-0); font-family: var(--body); font-weight: 600; letter-spacing: 0; margin-bottom: 0.35rem; }
-.rule p { margin: 0; color: var(--muted); font-size: var(--step--1); line-height: 1.6; }
-.checks { margin: 2.5rem 0 0; padding: 0; list-style: none; counter-reset: c; display: grid; gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
-.checks li { counter-increment: c; background: var(--sheet); padding: 1rem 1.25rem 1rem 3.5rem; position: relative; font-size: var(--step--1); color: var(--muted); }
-.checks li::before { content: counter(c); position: absolute; left: 1.25rem; top: 0.95rem; font-family: var(--mono); color: var(--accent); font-weight: 500; }
-.checks li b { color: var(--ink); font-weight: 600; }
-.checks-title { margin-top: 3rem; font-size: var(--step-1); }
-
-/* footer */
-.foot .wrap { border-top: 1px solid var(--rule); padding-block: 2rem 3rem; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; color: var(--muted); font-size: var(--step--1); }
-.foot nav { display: flex; gap: 1.25rem; flex-wrap: wrap; }
-
-@media (max-width: 880px) {
-  .hero .wrap { grid-template-columns: 1fr; }
-  .head { grid-template-columns: 1fr; }
-  .rules { grid-template-columns: 1fr 1fr; }
-  .row, .ledger.has-demo .row { grid-template-columns: 1fr auto; }
-  .row.labels { display: none; }
-  .row .namecell { grid-column: 1; }
-  .row .pill { grid-column: 2; grid-row: 1; justify-self: end; }
-  .row .what, .row .use, .row .floor, .row .demo, .row .nodemo { grid-column: 1 / -1; }
-}
-@media (max-width: 560px) {
-  .kinds { grid-template-columns: 1fr; }
-  .rules { grid-template-columns: 1fr; }
-  .bar nav { gap: 0.9rem; }
-  .statement { padding: 1.1rem 1rem 1rem; }
-}
-@media (prefers-reduced-motion: no-preference) {
-  .btn, a { transition: color 0.15s, background-color 0.15s, border-color 0.15s; }
-  .row .name { transition: transform 0.15s; }
-  .preview { transition: opacity 0.15s, visibility 0.15s; }
-}
+@media (prefers-reduced-motion: reduce) { .bar nav a:hover, .door:hover, .me:hover, .ship a:hover, .lang:hover { transform: none; } }
 </style>
 </head>
 <body>
@@ -247,229 +197,157 @@ section.block .wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); border-top: 1px
   <div class="wrap">
     <a class="mark" href="#top">Idle<span>Free</span></a>
     <nav aria-label="Sections">
-      <a href="#projects" data-i18n="nav_projects">Projects</a>
-      <a href="#how" data-i18n="nav_how">How it works</a>
-      <a href="https://github.com/cloudformer">GitHub</a>
-      <a href="https://pypi.org/user/cloudformer/">PyPI</a>
+      <a class="infra" href="#infra"><span class="pre">IdleFree</span> Infra <b id="nav-infra">·</b></a>
+      <a class="app" href="#app"><span class="pre">IdleFree</span> App <b id="nav-app">·</b></a>
       <button class="lang" id="lang" type="button" lang="zh-CN" aria-label="切换到中文">中文</button>
     </nav>
   </div>
 </header>
-
 <main id="top">
-  <section class="hero">
-    <div class="wrap">
-      <div class="lede">
-        <div class="eyebrow" data-i18n="hero_eyebrow">Truly free when idle</div>
-        <h1 data-i18n="hero_h1">Cloud services that cost nothing while nobody uses them.</h1>
-        <p data-i18n="hero_p">AWS's "serverless" databases, caches and schedulers still bill every hour. IdleFree rebuilds them on
-          Lambda, S3 and DynamoDB, behind the client you already use. You pay per request, and nothing when it's quiet.</p>
-        <div class="cta">
-          <a class="btn primary" href="#projects" data-i18n="cta_projects">See the projects</a>
-          <a class="btn ghost" href="https://github.com/cloudformer/s3rds" data-i18n="cta_start">Start with s3rds</a>
-        </div>
-      </div>
 
-      <article class="statement" aria-label="Monthly idle cost, before and after">
-        <header><span data-i18n="r_head">IDLE BILL · PER MONTH</span><span data-i18n="r_req">0 requests</span></header>
-        <ol>
-          <li><span>RDS (db.t4g.micro)</span><span class="was">~$14–45</span><small data-i18n="r_rds">s3rds · SQLite on S3</small></li>
-          <li><span>ElastiCache Serverless</span><span class="was">from ~$6</span><small data-i18n="r_cache">billed per GB-hour, traffic or not: Valkey ~$61 / GB a month, Redis OSS ~$91 · dynamoredis · DynamoDB</small></li>
-          <li><span>Managed Airflow (MWAA)</span><span class="was">~$360</span><small data-i18n="r_flow">lambdaflow · Lambda + Step Functions</small></li>
-          <li><span>Vault: HCP / 3 × EC2</span><span class="was">~$450 / ~$40</span><small data-i18n="r_vault">lambdavault · Lambda + S3 + KMS</small></li>
-        </ol>
-        <div class="total">
-          <span data-i18n="r_total">Cheapest idle floor</span><span class="was">~$420</span>
-          <div class="now"><span data-i18n="r_now">With IdleFree</span><b>≈ $0</b></div>
-        </div>
-        <footer data-i18n="r_foot">Idle floor = the least a service bills with no traffic; the total takes the cheapest option of each line. With IdleFree you pay per request; S3 storage costs cents.</footer>
-      </article>
+  <section class="hero"><div class="wrap">
+    <div class="top"><div class="lede"><a class="me" href="https://github.com/cloudformer" title="cloudformer on GitHub"><img id="me-avatar" src="https://github.com/cloudformer.png?size=96" alt=""><div><b id="me-name">cloudformer</b><span id="me-bio">open source on GitHub</span></div><span class="go">GitHub ↗</span></a><h1 data-i18n="hero_h1">Cloud services that cost nothing while nobody uses them.</h1><p data-i18n="hero_p">AWS's "serverless" databases, caches and schedulers still bill every hour, and so do the apps you host. IdleFree rebuilds them on Lambda, S3 and DynamoDB. You pay per request, and nothing when it's quiet.</p></div><div><h3 data-i18n="get_h">Get it</h3><div class="ship">
+      <a href="https://registry.terraform.io/modules/cloudformer/infra/aws"><small data-i18n="deploy_k">Deploy</small><b data-i18n="deploy_b">by Terraform ↗</b><span data-i18n="deploy_p">cloudformer/infra/aws on the Terraform Registry</span></a>
+      <a href="https://pypi.org/user/cloudformer/"><small data-i18n="install_k">Install</small><b data-i18n="install_b">with pip ↗</b><span data-i18n="install_p">every driver and server on PyPI</span></a>
+      <a href="https://github.com/cloudformer"><small data-i18n="code_k">Code</small><b data-i18n="code_b">on GitHub ↗</b><span data-i18n="code_p">source, tests and compatibility reports</span></a>
+    </div></div></div>
+    <div class="doors">
+      <a class="door infra" href="#infra"><h2>IdleFree Infra <span>→</span></h2><p data-i18n="infra_p">An AWS service, rebuilt. Same client, same API; the real service is one import away.</p><div class="names" id="n-infra"></div></a>
+      <a class="door app" href="#app"><h2>IdleFree App <span>→</span></h2><p data-i18n="app_p">An application, unchanged, on Lambda. Its own CLI, API and UI; only the host changes.</p><div class="names" id="n-app"></div></a>
     </div>
-  </section>
-
-  <section class="block" id="kinds">
-    <div class="wrap">
-      <div class="head">
-        <h2 data-i18n="kinds_h2">Two kinds of project</h2>
-        <p data-i18n="kinds_p">Either an AWS service rebuilt behind its standard client, or an existing application moved onto Lambda
-          with its code unchanged. In both cases the switch is one line, and so is the way back.</p>
-      </div>
-      <div class="kinds">
-        <div class="kind infra">
-          <div class="eyebrow">IdleFree Infra</div>
-          <h3 data-i18n="infra_h3">An AWS service, rebuilt</h3>
-          <p data-i18n="infra_p">Same client, same API, same error classes. When you outgrow it, the real service is one import away.</p>
-          <div class="swap"><s>import pymysql</s> → <ins>from s3rds import pymysql</ins></div>
-        </div>
-        <div class="kind app">
-          <div class="eyebrow">IdleFree App</div>
-          <h3 data-i18n="app_h3">An application, unchanged, on Lambda</h3>
-          <p data-i18n="app_p">The official release with its own CLI, API and UI. Only the host changes; there is no new client to learn.</p>
-          <div class="swap"><s>VAULT_ADDR=https://vault.internal</s> → <ins>VAULT_ADDR=&lt;Function URL&gt;</ins></div>
-        </div>
-      </div>
+    <div class="kpis">
+      <div class="kpi"><b id="k-proj">7</b><span data-i18n="k_proj">projects</span></div>
+      <div class="kpi"><b id="k-pypi">—</b><span data-i18n="k_pypi">packages on PyPI</span></div>
+      <div class="kpi"><b id="k-stars">—</b><span data-i18n="k_stars">GitHub stars</span></div>
+      <div class="kpi"><b id="k-recent">—</b><span data-i18n="k_recent">updated this month</span></div>
     </div>
-  </section>
-
-  <section class="block" id="projects">
-    <div class="wrap">
-      <div class="head">
-        <h2 data-i18n="projects_h2">Projects</h2>
-        <p data-i18n="projects_p">Each one deploys into your own AWS account with one <code>terraform apply</code>. Each has its own
-          compatibility report, generated by its test run.</p>
-      </div>
-
-      <div id="ledgers" aria-live="polite"><p class="later">Loading projects…</p></div>
-    </div>
-  </section>
-
-  <section class="block" id="how">
-    <div class="wrap">
-      <div class="head">
-        <h2 data-i18n="how_h2">How every project works</h2>
-        <p data-i18n="how_p">Every project follows the same rules, so if you know one, you know them all.</p>
-      </div>
-      <div class="rules">
-        <div class="rule"><h3 data-i18n="rule1_h">≈ $0 when idle</h3><p data-i18n="rule1_p">Only pay-per-request primitives: S3, DynamoDB, SQS, Lambda, Step Functions, EventBridge. Nothing runs, polls or is provisioned while nobody uses it.</p></div>
-        <div class="rule"><h3 data-i18n="rule2_h">The client you already have</h3><p data-i18n="rule2_p">pymysql, redis-py, Airflow, redshift_connector, the vault CLI. Moving to the real service later is one import or one URL.</p></div>
-        <div class="rule"><h3 data-i18n="rule3_h">Only tested features count</h3><p data-i18n="rule3_p">Every feature runs on the real service and on the project, and the results are compared. The report is regenerated by every test run.</p></div>
-        <div class="rule"><h3 data-i18n="rule4_h">Refused, never silently different</h3><p data-i18n="rule4_p">What needs a real server raises NotSupportedError with the reason, and MIGRATION.md says when to move.</p></div>
-        <div class="rule"><h3 data-i18n="rule5_h">Your account, one command</h3><p data-i18n="rule5_p">Terraform from the first release, least-privilege IAM, arm64 and x86_64. Destroy removes everything.</p></div>
-        <div class="rule"><h3 data-i18n="rule6_h">Built for the long tail</h3><p data-i18n="rule6_p">MVPs, side projects, dev and staging: small, idle most of the time. Not a replacement for a busy production cluster.</p></div>
-      </div>
-
-      <h3 class="checks-title" data-i18n="checks_title">Before a project starts: three checks</h3>
-      <ol class="checks">
-        <li data-i18n="check1"><b>AWS's own service bills while idle.</b> If it scales to zero, or a lasting free tier covers small use, there is nothing to rebuild.</li>
-        <li data-i18n="check2"><b>No pay-per-use AWS service is a small switch away.</b> If SQS or Athena already does the job, use it instead of imitating an old API on top of it.</li>
-        <li data-i18n="check3"><b>Never dress one AWS service up as another product.</b> SQS stays SQS. A project rebuilds a service that bills while idle, behind the client its users already have.</li>
-      </ol>
-    </div>
-  </section>
+  </div></section>
+  <section class="block cat infra" id="infra"><div class="wrap"><h2>IdleFree Infra</h2><div class="list"></div></div></section>
+  <section class="block cat app" id="app"><div class="wrap"><h2>IdleFree App</h2><div class="list"></div></div></section>
 </main>
-
 <footer class="foot">
   <div class="wrap">
-    <span>IdleFree · MIT licensed · by cloudformer</span>
+    <span data-i18n="foot">IdleFree · MIT licensed · by cloudformer</span>
     <nav aria-label="Elsewhere">
-      <a href="https://github.com/cloudformer">github.com/cloudformer</a>
+      <a href="#infra">Infra</a>
+      <a href="#app">App</a>
+      <a href="https://github.com/cloudformer">GitHub</a>
+      <a href="https://pypi.org/user/cloudformer/">PyPI</a>
+      <a href="https://registry.terraform.io/modules/cloudformer/infra/aws">Terraform Registry</a>
       <a href="https://github.com/topics/idlefree">#idlefree</a>
-      <a href="https://pypi.org/project/idlefree/">pypi.org/project/idlefree</a>
     </nav>
   </div>
 </footer>
-
 <script>
-/* The two project tables come from projects.json (next to this page): the only place projects are maintained.
-   Each section: id ("infra" | "app": its color), title, subtitle, columns (5 labels), projects, optional next.
-   Each project: name, url, diagram (architecture image, shown on hover), demo (a link: "demo" in the Demo column; empty: "Coming soon"),
-   what, built_on, use, was (struck out), now (optional), status, live (green pill).
-   On touch screens (no hover) the diagram is a link under the name instead of a preview. Project rows stay English. */
+/* Shared: helpers to build project cards from projects.json, and the ease-out scroll for in-page links. */
+function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+function price(p) { var d = el("div", "price"); if (p.was) d.appendChild(el("s", null, p.was)); d.appendChild(document.createTextNode(" → " + (p.now || "≈ $0 idle"))); return d; }
+function pill(p) { return el("span", "pill" + (p.live ? " live" : ""), p.status || ""); }
+function links(p) {
+  var d = el("div", "links");
+  var g = el("a", null, "GitHub ↗"); g.href = p.url; d.appendChild(g);
+  if (/PyPI/.test(p.status || "")) { var y = el("a", null, "PyPI ↗"); y.href = "https://pypi.org/project/" + p.name + "/"; d.appendChild(y); }
+  if (p.demo) { var m = el("a", null, "Demo ↗"); m.href = p.demo; d.appendChild(m); }
+  return d;
+}
+function diagram(p) { var i = el("img", "diagram"); i.src = p.diagram; i.alt = p.name + " architecture"; i.loading = "lazy"; return i; }
+function load(render) {
+  fetch("projects.json", { cache: "no-cache" }).then(function (r) { return r.json(); }).then(function (d) {
+    var by = {}; (d.sections || []).forEach(function (s) { by[s.id] = s; }); render(by);
+  });
+}
 (function () {
-  var root = document.getElementById("ledgers");
-  function el(tag, cls, text) {
-    var e = document.createElement(tag);
-    if (cls) e.className = cls;
-    if (text != null) e.textContent = text;
-    return e;
-  }
-  function section(sec) {
-    var box = el("div", "ledger " + (sec.id || ""));
-    box.setAttribute("aria-label", sec.title + " projects");
-    var h = el("h3", null, sec.title + " ");
-    if (sec.subtitle) h.appendChild(el("span", null, sec.subtitle));
-    box.appendChild(h);
-    var hasDemo = true;   // the Demo column is always there: "Coming soon" until a project has a demo link
-    box.classList.add("has-demo");
-    var labels = el("div", "row labels");
-    labels.setAttribute("aria-hidden", "true");
-    (sec.columns || []).forEach(function (c) { labels.appendChild(el("span", null, c)); });
-    if (hasDemo) labels.appendChild(el("span", null, "Demo"));
-    box.appendChild(labels);
-    (sec.projects || []).forEach(function (p) {
-      var row = el("div", "row");
-      var cell = el("div", "namecell");
-      var name = el("a", "name", p.name);
-      name.href = p.url || "#";
-      cell.appendChild(name);
-      if (p.diagram) {
-        var fig = el("figure", "preview");
-        var img = el("img");
-        img.src = p.diagram;
-        img.alt = p.name + " architecture";
-        img.loading = "lazy";
-        fig.appendChild(img);
-        fig.appendChild(el("figcaption", null, p.name + " · architecture"));
-        cell.appendChild(fig);
-        var link = el("a", "diagram-link", "architecture \u2197");
-        link.href = p.diagram;
-        cell.appendChild(link);
-        var flip = function () {   // open upward when there is no room below
-          fig.classList.toggle("up", window.innerHeight - name.getBoundingClientRect().bottom < 340);
-        };
-        name.addEventListener("mouseenter", flip);
-        name.addEventListener("focus", flip);
-      }
-      row.appendChild(cell);
-      var what = el("div", "what");
-      what.appendChild(el("b", null, p.what || ""));
-      if (p.built_on) what.appendChild(el("div", null, p.built_on));
-      row.appendChild(what);
-      row.appendChild(el("div", "use", p.use || ""));
-      var floor = el("div", "floor");
-      if (p.was) floor.appendChild(el("s", null, p.was));
-      if (p.now) floor.appendChild(document.createTextNode(" → " + p.now));
-      row.appendChild(floor);
-      row.appendChild(el("span", "pill" + (p.live ? " live" : ""), p.status || ""));
-      if (p.demo) {
-        var demo = el("a", "demo", "demo \u2197");
-        demo.href = p.demo;
-        row.appendChild(demo);
-      } else if (hasDemo) {
-        row.appendChild(el("span", "nodemo", "Coming soon"));
-      }
-      box.appendChild(row);
+  var bar = document.querySelector(".bar"), still = window.matchMedia("(prefers-reduced-motion: reduce)");
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest && e.target.closest('a[href^="#"]');
+    if (!a || e.button !== 0 || e.metaKey || e.ctrlKey) return;
+    var id = a.getAttribute("href").slice(1), t = id && document.getElementById(id);
+    if (!t) return;
+    e.preventDefault();
+    var from = window.scrollY, to = id === "top" ? 0 : t.getBoundingClientRect().top + from - bar.offsetHeight;
+    history.pushState(null, "", "#" + id);
+    if (still.matches) { window.scrollTo(0, to); return; }
+    var start = null, ms = Math.min(900, 350 + Math.abs(to - from) / 3);
+    requestAnimationFrame(function step(now) {
+      if (start === null) start = now;
+      var k = Math.min(1, (now - start) / ms);
+      window.scrollTo(0, from + (to - from) * (1 - Math.pow(1 - k, 3)));
+      if (k < 1) requestAnimationFrame(step);
     });
-    if (sec.next) {
-      var next = el("p", "later");
-      next.appendChild(el("b", null, "Next: "));
-      next.appendChild(document.createTextNode(sec.next));
-      box.appendChild(next);
-    }
-    return box;
-  }
-  fetch("projects.json", { cache: "no-cache" })
-    .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
-    .then(function (data) {
-      root.textContent = "";
-      (data.sections || []).forEach(function (sec) { root.appendChild(section(sec)); });
-    })
-    .catch(function (e) {
-      root.textContent = "";
-      root.appendChild(el("p", "later", "The project list could not be loaded (" + e.message + "). See github.com/cloudformer."));
-    });
+  });
 })();
 
-/* Language: English is the page itself; Chinese replaces every [data-i18n] element from strings.json ("zh").
-   #zh / #en in the address picks one (share cloudformer.github.io/#zh in Chinese forums); otherwise the last choice
-   (remembered in this browser), otherwise English. In-page links (#projects) keep the language. */
-(function () {
-  var KEY = "idlefree-lang";
-  var nodes = Array.prototype.slice.call(document.querySelectorAll("[data-i18n]"));
-  var en = {};
-  nodes.forEach(function (n) { en[n.getAttribute("data-i18n")] = n.innerHTML; });
-  var zh = null, current = "en";
-  var button = document.getElementById("lang");
+function thumb(p) {
+  var t = el("a", "thumb"), clip = el("span", "clip"); t.href = p.diagram; t.setAttribute("aria-label", p.name + " architecture");
+  clip.appendChild(diagram(p)); t.appendChild(clip);
+  var f = el("span", "preview"), big = el("img"); big.src = p.diagram; big.alt = ""; big.loading = "lazy"; f.appendChild(big);
+  f.appendChild(el("span", null, p.name + " · architecture")); t.appendChild(f);
+  t.addEventListener("mouseenter", function () { f.classList.toggle("up", window.innerHeight - t.getBoundingClientRect().bottom < 360); });
+  return t;
+}
 
-  function remember(lang) { try { localStorage.setItem(KEY, lang); } catch (e) { /* private mode: this visit only */ } }
+var LIVE = { pypi: {}, repo: {} };
+function getJSON(u) { return fetch(u).then(function (r) { if (!r.ok) throw 0; return r.json(); }); }
+getJSON("https://api.github.com/users/cloudformer").then(function (u) {
+  document.getElementById("me-avatar").src = u.avatar_url;
+  document.getElementById("me-name").textContent = u.name || u.login;
+  document.getElementById("me-bio").textContent = u.bio || (u.public_repos + " public repositories on GitHub");
+}).catch(function () {});
+function ago(iso) { var d = Math.round((Date.now() - new Date(iso)) / 864e5); return d <= 0 ? "today" : d === 1 ? "yesterday" : d + " days ago"; }
+function line(p) {
+  var r = el("div", "line"), t = thumb(p); r.appendChild(t);
+  var n = el("a", "name", p.name + " ↗"); n.href = p.url; r.appendChild(n);
+  var w = el("div"); w.appendChild(el("b", null, p.what)); w.appendChild(el("div", "on", p.built_on)); r.appendChild(w);
+  var c = el("div", "idle"), m = p.idle_month;   // monthly idle cost in USD: the grey bar, scaled to $360
+  if (m) { var t = el("div", "track"), i = el("i"); i.style.width = Math.max(2, m / 360 * 100) + "%"; t.appendChild(i); c.appendChild(t); }
+  var a = el("div", "amt"); a.appendChild(document.createTextNode("costs from ")); a.appendChild(el("s", null, p.was || ""));
+  a.appendChild(document.createTextNode(" → ")); a.appendChild(el("b", null, p.now || "≈ $0")); c.appendChild(a); r.appendChild(c);
+  var s = el("div", "side"), pl = pill(p), st = el("span", "stars", ""); s.appendChild(pl); s.appendChild(links(p)); s.appendChild(st); r.appendChild(s);
+  getJSON("https://pypi.org/pypi/" + p.name + "/json").then(function (d) { LIVE.pypi[p.name] = d.info.version; pl.textContent = d.info.version + " on PyPI"; pl.classList.add("live"); document.dispatchEvent(new Event("live")); }).catch(function () {});
+  getJSON("https://api.github.com/repos/cloudformer/" + p.name).then(function (g) { LIVE.repo[p.name] = g; st.textContent = "★ " + g.stargazers_count + " · updated " + ago(g.pushed_at); document.dispatchEvent(new Event("live")); }).catch(function () {});
+  return r;
+}
+load(function (by) { window.BY = by; ["infra", "app"].forEach(function (k) {
+  document.getElementById("nav-" + k).textContent = (by[k].projects || []).length;
+  var list = document.querySelector("#" + k + " .list"), names = document.getElementById("n-" + k);
+  (by[k].projects || []).forEach(function (p) { names.appendChild(el("span", null, p.name)); list.appendChild(line(p)); });
+}); if (window.extra) window.extra(by); });
+
+var COSTS = [["Managed Airflow (MWAA)", "lambdaflow", 360], ["Vault on 3 × EC2", "lambdavault", 40], ["RDS (db.t4g.micro)", "s3rds", 14], ["ElastiCache Serverless", "dynamoredis", 6]];
+function costs(id, bars) {
+  var box = document.getElementById(id); if (!box) return;
+  COSTS.forEach(function (c) {
+    var r = el("div", "cost"), s = el("div", "svc"); s.appendChild(el("b", null, c[0])); s.appendChild(el("span", null, "→ " + c[1])); r.appendChild(s);
+    if (bars) { var t = el("div", "track"), i = el("i"); i.style.width = Math.max(2, c[2] / 360 * 100) + "%"; t.appendChild(i); r.appendChild(t); } else r.appendChild(el("span"));
+    var a = el("div", "amt"); a.appendChild(document.createTextNode("costs from ")); a.appendChild(el("s", null, "$" + c[2]));
+    a.appendChild(document.createTextNode(" /month idle → ")); a.appendChild(el("b", null, "≈ $0")); r.appendChild(a);
+    box.appendChild(r);
+  });
+}
+document.addEventListener("live", function () {
+  if (!window.BY || !document.getElementById("k-proj")) return;
+  var all = []; ["infra", "app"].forEach(function (k) { all = all.concat(BY[k].projects || []); });
+  var pypi = 0, stars = 0, recent = 0;
+  all.forEach(function (p) { var g = LIVE.repo[p.name]; if (LIVE.pypi[p.name]) pypi++;
+    if (g) { stars += g.stargazers_count; if (Date.now() - new Date(g.pushed_at) < 30 * 864e5) recent++; } });
+  document.getElementById("k-proj").textContent = all.length; document.getElementById("k-pypi").textContent = pypi;
+  document.getElementById("k-stars").textContent = stars; document.getElementById("k-recent").textContent = recent;
+});
+
+
+/* Language: every [data-i18n] element takes its text from strings.json ("en" / "zh", same keys side by side);
+   the English written in the page is the fallback. #zh / #en in the address picks one (cloudformer.github.io/#zh),
+   otherwise the last choice in this browser, otherwise English. Project rows (projects.json) stay English. */
+(function () {
+  var KEY = "idlefree-lang", nodes = Array.prototype.slice.call(document.querySelectorAll("[data-i18n]"));
+  var page = {}; nodes.forEach(function (n) { page[n.getAttribute("data-i18n")] = n.innerHTML; });
+  var strings = null, current = "en", button = document.getElementById("lang");
+  function remember(l) { try { localStorage.setItem(KEY, l); } catch (e) {} }
   function saved() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
   function fromHash() { var h = location.hash.slice(1); return h === "zh" || h === "en" ? h : null; }
-
   function render(lang) {
-    nodes.forEach(function (n) {
-      var k = n.getAttribute("data-i18n");
-      n.innerHTML = lang === "zh" && zh && zh[k] != null ? zh[k] : en[k];
-    });
+    var t = (strings && strings[lang]) || {};
+    nodes.forEach(function (n) { var k = n.getAttribute("data-i18n"); n.innerHTML = t[k] != null ? t[k] : page[k]; });
     document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
     button.textContent = lang === "zh" ? "EN" : "中文";
     button.setAttribute("lang", lang === "zh" ? "en" : "zh-CN");
@@ -477,21 +355,12 @@ section.block .wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); border-top: 1px
     current = lang;
   }
   function use(lang) {
-    if (lang !== "zh" || zh) { render(lang); return; }
-    fetch("strings.json", { cache: "no-cache" })
-      .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
-      .then(function (data) { zh = data.zh || {}; render("zh"); })
-      .catch(function () { render("en"); });
+    if (strings) { render(lang); return; }
+    fetch("strings.json", { cache: "no-cache" }).then(function (r) { return r.json(); })
+      .then(function (d) { strings = d; render(lang); }).catch(function () { render("en"); });
   }
-  button.addEventListener("click", function () {
-    var next = current === "zh" ? "en" : "zh";
-    remember(next);
-    use(next);
-  });
-  window.addEventListener("hashchange", function () {
-    var h = fromHash();
-    if (h && h !== current) { remember(h); use(h); }
-  });
+  button.addEventListener("click", function () { var next = current === "zh" ? "en" : "zh"; remember(next); use(next); });
+  window.addEventListener("hashchange", function () { var h = fromHash(); if (h && h !== current) { remember(h); use(h); } });
   var first = fromHash() || saved() || "en";
   if (fromHash()) remember(first);
   use(first);

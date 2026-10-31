@@ -21,6 +21,7 @@
           "built_on": "S3 + Lambda (SQLite)",
           "use": "from s3rds import pymysql · SQLAlchemy · Django",
           "was": "~$14–45",
+          "idle_month": 14,
           "now": "$0",
           "status": "0.2.1 on PyPI",
           "live": true
@@ -34,6 +35,7 @@
           "built_on": "DynamoDB",
           "use": "from dynamoredis import redis",
           "was": "from ~$6, per GB-hour",
+          "idle_month": 6,
           "now": "$0",
           "status": "0.1.2 on PyPI",
           "live": true
@@ -47,6 +49,7 @@
           "built_on": "Lambda + EventBridge + Step Functions",
           "use": "from lambdaflow import airflow",
           "was": "~$360",
+          "idle_month": 360,
           "now": "$0",
           "status": "0.1.0 on PyPI",
           "live": true
@@ -87,7 +90,8 @@
           "what": "HashiCorp Vault",
           "built_on": "Lambda + S3 + KMS",
           "use": "vault CLI, Terraform provider, UI: only VAULT_ADDR",
-          "was": "~$450 HCP / ~$40 3 × EC2",
+          "was": "~$450 HCP / ~$20 3 × t4g.micro",
+          "idle_month": 20,
           "status": "0.1.0 on PyPI",
           "live": true
         },
