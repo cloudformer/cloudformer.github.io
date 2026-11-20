@@ -11,6 +11,7 @@
 <style>
 :root {
   --accent-soft-2: #cfe7e0; --app-soft-2: #f1e0c4; --sheet-2: #eef2f4;
+  --accent-pale: #eef7f4; --accent-line: #b9dcd3; --app-pale: #fcf5ea; --app-line: #ead2ad; --neutral-line: #c3cbd2;
   --paper: #f2f4f6; --sheet: #ffffff; --ink: #121a22; --muted: #5b6874; --rule: #d6dce2;
   --accent: #0a6e5c; --accent-soft: #e0f0ec; --strike: #b4372f; --chip: #e8ecf0;
   --app: #9a5b0b; --app-soft: #f7ecda; --tint: #e8f1ee; --grid: rgba(10, 110, 92, 0.07);
@@ -25,6 +26,7 @@
     --accent: #4fd1b0; --accent-soft: #143430; --strike: #f0857a; --chip: #1e2a32;
     --app: #f2b35c; --app-soft: #33281a; --tint: #11201f; --grid: rgba(79, 209, 176, 0.06);
     --accent-soft-2: #1a403a; --app-soft-2: #3e3120; --sheet-2: #1b252c;
+    --accent-pale: #12252a; --accent-line: #24504a; --app-pale: #261f16; --app-line: #4d3c22; --neutral-line: #3a4752;
     color-scheme: dark;
   }
 }
@@ -33,6 +35,7 @@
   --accent: #4fd1b0; --accent-soft: #143430; --strike: #f0857a; --chip: #1e2a32;
   --app: #f2b35c; --app-soft: #33281a; --tint: #11201f; --grid: rgba(79, 209, 176, 0.06);
   --accent-soft-2: #1a403a; --app-soft-2: #3e3120; --sheet-2: #1b252c;
+  --accent-pale: #12252a; --accent-line: #24504a; --app-pale: #261f16; --app-line: #4d3c22; --neutral-line: #3a4752;
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
@@ -45,20 +48,18 @@ h1, h2, h3 { font-family: var(--display); margin: 0; letter-spacing: -0.01em; te
 .bar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 0.8rem; }
 .mark { font-family: var(--display); font-weight: 800; font-size: 1.5rem; text-decoration: none; letter-spacing: -0.02em; }
 .mark span { color: var(--accent); }
-.bar nav { display: flex; gap: 0.7rem; font-size: 1.0625rem; font-weight: 600; flex-wrap: wrap; align-items: center; }
-.bar nav a { display: inline-flex; align-items: center; gap: 0.55rem; text-decoration: none; padding: 0.5rem 0.65rem 0.5rem 1rem;
-  border-radius: 999px; border: 1.5px solid; transition: transform .15s, background-color .15s, color .15s; }
-.bar nav a b { font: 600 0.78rem/1 var(--mono); min-width: 1.6rem; padding: 0.3rem 0.45rem; border-radius: 999px; text-align: center; }
-.bar nav a.infra { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
-.bar nav a.infra b { background: var(--accent); color: var(--sheet); }
-.bar nav a.app { color: var(--app); border-color: var(--app); background: var(--app-soft); }
-.bar nav a.app b { background: var(--app); color: var(--sheet); }
-.bar nav a:hover { transform: translateY(-1px); }
-.bar nav a.infra:hover { background: var(--accent); color: var(--sheet); }
-.bar nav a.app:hover { background: var(--app); color: var(--sheet); }
-.bar nav a:hover b { background: var(--sheet); }
-.bar nav a.infra:hover b { color: var(--accent); } .bar nav a.app:hover b { color: var(--app); }
-@media (max-width: 560px) { .bar nav .pre { display: none; } .bar nav a { padding: 0.4rem 0.5rem 0.4rem 0.8rem; font-size: 0.95rem; } }
+.bar nav { display: flex; gap: 0.9rem; font: 600 0.92rem var(--body); flex-wrap: wrap; align-items: center; }
+.bar nav a, .bar .lang { display: inline-flex; align-items: center; gap: 0.4rem; text-decoration: none; cursor: pointer; font: inherit; background: none;
+  border: none; border-bottom: 2px solid; padding: 0.28rem 0.5rem; border-radius: 6px 6px 0 0; }
+.bar nav a b { font: 600 0.72rem/1 var(--mono); color: var(--muted); }
+.bar nav a.infra { color: var(--accent); border-color: var(--accent-line); }
+.bar nav a.app { color: var(--app); border-color: var(--app-line); }
+.bar nav a.infra.on, .bar nav a.infra:hover { background: var(--accent-pale); border-color: var(--accent); }
+.bar nav a.app.on, .bar nav a.app:hover { background: var(--app-pale); border-color: var(--app); }
+.bar .lang { color: var(--muted); border-color: var(--neutral-line); justify-content: center; }
+.bar .lang:hover { color: var(--ink); border-color: var(--muted); }
+.bar .lang:focus-visible, .bar nav a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+@media (max-width: 560px) { .bar nav .pre { display: none; } .bar nav { gap: 0.5rem; } }
 .eyebrow { font-family: var(--mono); font-size: 0.8125rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
 .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.2rem; font: 600 0.95rem/1 var(--body); text-decoration: none; border-radius: 6px; border: 1px solid var(--ink); }
 .btn.infra { background: var(--accent); border-color: var(--accent); color: #fff; }
@@ -83,11 +84,11 @@ section.block { scroll-margin-top: 4.5rem; }
 .rule h3 { font: 600 1rem/1.3 var(--body); margin-bottom: 0.3rem; }
 .rule p { margin: 0; color: var(--muted); font-size: 0.875rem; }
 @media (max-width: 880px) { .rules { grid-template-columns: 1fr 1fr; } }
-@media (max-width: 560px) { .rules { grid-template-columns: 1fr; } .bar nav { gap: 0.9rem; font-size: 0.95rem; } }
+@media (max-width: 560px) { .rules { grid-template-columns: 1fr; } }
 
 .hero { background-color: var(--tint); background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 32px 32px; border-bottom: 1px solid var(--rule); }
 .hero .wrap { padding-block: 2rem 2.25rem; display: grid; gap: 1.1rem; }
-.hero h1 { font-size: clamp(1.9rem, 1.2rem + 2.2vw, 2.7rem); line-height: 1.08; max-width: 44rem; }
+.hero h1 { font-size: clamp(1.9rem, 1.2rem + 2.2vw, 2.7rem); line-height: 1.15; max-width: 44rem; }
 .hero p { margin: 0; color: var(--muted); max-width: 44rem; font-size: 1.02rem; }
 .me { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
 .me img { width: 2.75rem; height: 2.75rem; border-radius: 50%; border: 2px solid var(--sheet); box-shadow: 0 0 0 1px var(--rule); }
@@ -141,11 +142,7 @@ section.block { scroll-margin-top: 4.5rem; }
 .ship a:hover { transform: translateY(-2px); border-color: var(--accent); }
 .ship small { font: 500 0.72rem/1 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
 .ship b { font: 700 1.15rem/1.3 var(--display); } .ship span { color: var(--muted); font-size: 0.85rem; }
-/* live summary */
-.kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
-.kpi { background: var(--sheet); border: 1px solid var(--rule); border-radius: 10px; padding: 1rem 1.2rem; }
-.kpi b { display: block; font: 800 2rem/1.1 var(--display); color: var(--accent); } .kpi span { color: var(--muted); font-size: 0.85rem; }
-@media (max-width: 880px) { .ship, .kpis { grid-template-columns: 1fr 1fr; } .cost { grid-template-columns: 1fr auto; } .cost .track { grid-column: 1 / -1; grid-row: 2; } }
+@media (max-width: 880px) { .ship { grid-template-columns: 1fr 1fr; } .cost { grid-template-columns: 1fr auto; } .cost .track { grid-column: 1 / -1; grid-row: 2; } }
 
 /* profile card: a box that reads as a link, lifts on hover */
 .me { display: inline-flex; align-items: center; gap: 0.75rem; padding: 0.55rem 0.9rem 0.55rem 0.55rem; background: var(--sheet);
@@ -159,14 +156,22 @@ section.block { scroll-margin-top: 4.5rem; }
 .top .ship { grid-template-columns: 1fr; gap: 0.6rem; }
 .top .ship a { padding: 0.7rem 1rem; grid-template-columns: auto 1fr; column-gap: 0.8rem; align-items: center; }
 .top .ship small { grid-row: span 2; width: 4.4rem; }
-.top .ship b { font-size: 1rem; } .top .ship span { font-size: 0.8rem; }
+.top .ship b { font-size: 1rem; }
+.top .ship small { line-height: 1.2; }
+.nums { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 0.6rem; font-variant-numeric: tabular-nums; }
+.nums > span { display: grid; min-width: 0; line-height: 1.25; color: var(--muted); }
+.nums b { font: 800 1rem/1.15 var(--display) !important; color: var(--accent); }
+.nums [data-i18n] { font-size: 0.7rem; white-space: nowrap; }
 .top h3 { font: 600 0.75rem/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.6rem; }
 @media (max-width: 880px) { .top { grid-template-columns: 1fr; } }
 /* idle cost in grey: what it used to cost */
 .cost .track i { background: #a7b0b8; }
 .cost .amt s { color: var(--muted); }
 
-.hero .kpis { margin-top: 0.1rem; } .hero .kpi { padding: 0.7rem 1rem; } .hero .kpi b { font-size: 1.6rem; }
+/* translated text: both languages in one grid cell, sized by the longer one; the other is only hidden */
+.bi { display: inline-grid; } .bi.block { display: grid; }
+.bi > * { grid-area: 1 / 1; }
+html[lang="zh-CN"] .bi > [lang="en"], html:not([lang="zh-CN"]) .bi > [lang="zh-CN"] { visibility: hidden; }
 /* project rows: thumbnail | name | what | idle cost (grey bar, then the money) | status + links */
 .line { grid-template-columns: 9rem 9rem minmax(0, 1fr) 17rem 8.5rem; }
 .idle { display: grid; gap: 0.35rem; }
@@ -178,18 +183,13 @@ section.block { scroll-margin-top: 4.5rem; }
 
 
 /* ---- one hover for everything clickable: it eases down 2px and its surface turns a shade darker ---- */
-.bar nav a, .door, .me, .ship a, .lang { transition: transform .2s ease, background-color .2s ease, border-color .2s ease, box-shadow .2s ease; }
-.bar nav a:hover, .door:hover, .me:hover, .ship a:hover, .lang:hover { transform: translateY(2px); box-shadow: none; }
-.bar nav a.infra:hover, .door.infra:hover { background: var(--accent-soft-2); color: var(--accent); }
-.bar nav a.app:hover, .door.app:hover { background: var(--app-soft-2); color: var(--app); }
-.bar nav a.infra:hover b { background: var(--accent); color: var(--sheet); }
-.bar nav a.app:hover b { background: var(--app); color: var(--sheet); }
+.bar nav a, .bar .lang { transition: background-color .2s ease, border-color .2s ease, color .2s ease; }
+.door, .me, .ship a { transition: transform .2s ease, background-color .2s ease, border-color .2s ease, box-shadow .2s ease; }
+.door:hover, .me:hover, .ship a:hover { transform: translateY(2px); box-shadow: none; }
+.door.infra:hover { background: var(--accent-soft-2); color: var(--accent); }
+.door.app:hover { background: var(--app-soft-2); color: var(--app); }
 .me:hover, .ship a:hover { background: var(--sheet-2); border-color: var(--accent); }
-.lang { font: 600 0.95rem/1 var(--body); color: var(--ink); background: var(--sheet); cursor: pointer; border: 1.5px solid var(--rule); border-radius: 999px; padding: 0.55rem 0.9rem; }
-.lang:hover { background: var(--sheet-2); border-color: var(--ink); }
-.lang:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-:lang(zh) .hero h1 { line-height: 1.2; letter-spacing: 0; }
-@media (prefers-reduced-motion: reduce) { .bar nav a:hover, .door:hover, .me:hover, .ship a:hover, .lang:hover { transform: none; } }
+@media (prefers-reduced-motion: reduce) { .door:hover, .me:hover, .ship a:hover { transform: none; } }
 </style>
 </head>
 <body>
@@ -199,27 +199,24 @@ section.block { scroll-margin-top: 4.5rem; }
     <nav aria-label="Sections">
       <a class="infra" href="#infra"><span class="pre">IdleFree</span> Infra <b id="nav-infra">·</b></a>
       <a class="app" href="#app"><span class="pre">IdleFree</span> App <b id="nav-app">·</b></a>
-      <button class="lang" id="lang" type="button" lang="zh-CN" aria-label="切换到中文">中文</button>
+      <button class="lang" id="lang" type="button" aria-label="Switch language / 切换语言"><span class="bi"><span lang="en">中文</span><span lang="zh-CN">EN</span></span></button>
     </nav>
   </div>
 </header>
 <main id="top">
 
   <section class="hero"><div class="wrap">
-    <div class="top"><div class="lede"><a class="me" href="https://github.com/cloudformer" title="cloudformer on GitHub"><img id="me-avatar" src="https://github.com/cloudformer.png?size=96" alt=""><div><b id="me-name">cloudformer</b><span id="me-bio">open source on GitHub</span></div><span class="go">GitHub ↗</span></a><h1 data-i18n="hero_h1">Cloud services that cost nothing while nobody uses them.</h1><p data-i18n="hero_p">AWS's "serverless" databases, caches and schedulers still bill every hour, and so do the apps you host. IdleFree rebuilds them on Lambda, S3 and DynamoDB. You pay per request, and nothing when it's quiet.</p></div><div><h3 data-i18n="get_h">Get it</h3><div class="ship">
-      <a href="https://registry.terraform.io/modules/cloudformer/infra/aws"><small data-i18n="deploy_k">Deploy</small><b data-i18n="deploy_b">by Terraform ↗</b><span data-i18n="deploy_p">cloudformer/infra/aws on the Terraform Registry</span></a>
-      <a href="https://pypi.org/user/cloudformer/"><small data-i18n="install_k">Install</small><b data-i18n="install_b">with pip ↗</b><span data-i18n="install_p">every driver and server on PyPI</span></a>
-      <a href="https://github.com/cloudformer"><small data-i18n="code_k">Code</small><b data-i18n="code_b">on GitHub ↗</b><span data-i18n="code_p">source, tests and compatibility reports</span></a>
+    <div class="top"><div class="lede"><a class="me" href="https://github.com/cloudformer" title="cloudformer on GitHub"><img id="me-avatar" src="https://github.com/cloudformer.png?size=96" alt=""><div><b id="me-name">cloudformer</b><span id="me-bio">open source on GitHub</span></div><span class="go">GitHub ↗</span></a><h1 data-i18n="hero_h1">Cloud services with zero cost when idle.</h1><p data-i18n="hero_p">AWS's serverless databases, caches and schedulers still bill by the hour, as do self-hosted applications. IdleFree reimplements them on Lambda, S3 and DynamoDB: billed per request, with zero cost when idle.</p></div><div><h3 data-i18n="get_h">Distribution</h3><div class="ship">
+      <a href="https://registry.terraform.io/modules/cloudformer/infra/aws"><small data-i18n="deploy_k">Deploy</small><b>Terraform Registry ↗</b>
+        <span class="nums"><span><b id="s-modules">6</b><span data-i18n="n_modules">modules</span></span><span><b id="s-versions">11</b><span data-i18n="n_versions">versions</span></span><span><b id="s-downloads">84</b><span data-i18n="n_downloads">downloads</span></span></span></a>
+      <a href="https://pypi.org/user/cloudformer/"><small data-i18n="install_k">Install</small><b>PyPI ↗</b>
+        <span class="nums"><span><b id="s-packages">16</b><span data-i18n="n_packages">packages</span></span><span><b id="s-releases">59</b><span data-i18n="n_releases">releases</span></span><span><b id="s-pypi30">6,520</b><span data-i18n="n_pypi30">downloads (30d)</span></span></span></a>
+      <a href="https://github.com/cloudformer"><small data-i18n="code_k">Source</small><b>GitHub ↗</b>
+        <span class="nums"><span><b id="s-repos">17</b><span data-i18n="n_repos">public repos</span></span><span><b id="s-commits30">224</b><span data-i18n="n_commits30">commits (30d)</span></span><span><b id="s-tags">49</b><span data-i18n="n_tags">tagged releases</span></span></span></a>
     </div></div></div>
     <div class="doors">
       <a class="door infra" href="#infra"><h2>IdleFree Infra <span>→</span></h2><p data-i18n="infra_p">An AWS service, rebuilt. Same client, same API; the real service is one import away.</p><div class="names" id="n-infra"></div></a>
       <a class="door app" href="#app"><h2>IdleFree App <span>→</span></h2><p data-i18n="app_p">An application, unchanged, on Lambda. Its own CLI, API and UI; only the host changes.</p><div class="names" id="n-app"></div></a>
-    </div>
-    <div class="kpis">
-      <div class="kpi"><b id="k-proj">7</b><span data-i18n="k_proj">projects</span></div>
-      <div class="kpi"><b id="k-pypi">—</b><span data-i18n="k_pypi">packages on PyPI</span></div>
-      <div class="kpi"><b id="k-stars">—</b><span data-i18n="k_stars">GitHub stars</span></div>
-      <div class="kpi"><b id="k-recent">—</b><span data-i18n="k_recent">updated this month</span></div>
     </div>
   </div></section>
   <section class="block cat infra" id="infra"><div class="wrap"><h2>IdleFree Infra</h2><div class="list"></div></div></section>
@@ -324,15 +321,24 @@ function costs(id, bars) {
     box.appendChild(r);
   });
 }
-document.addEventListener("live", function () {
-  if (!window.BY || !document.getElementById("k-proj")) return;
-  var all = []; ["infra", "app"].forEach(function (k) { all = all.concat(BY[k].projects || []); });
-  var pypi = 0, stars = 0, recent = 0;
-  all.forEach(function (p) { var g = LIVE.repo[p.name]; if (LIVE.pypi[p.name]) pypi++;
-    if (g) { stars += g.stargazers_count; if (Date.now() - new Date(g.pushed_at) < 30 * 864e5) recent++; } });
-  document.getElementById("k-proj").textContent = all.length; document.getElementById("k-pypi").textContent = pypi;
-  document.getElementById("k-stars").textContent = stars; document.getElementById("k-recent").textContent = recent;
-});
+/* The Distribution numbers come from stats.json when it exists (the numbers written in the page are the fallback). */
+fetch("stats.json", { cache: "no-cache" }).then(function (r) { if (!r.ok) throw 0; return r.json(); }).then(function (s) {
+  var put = { "s-modules": s.registry.modules, "s-versions": s.registry.versions, "s-downloads": s.registry.downloads,
+    "s-packages": s.pypi.packages, "s-releases": s.pypi.releases, "s-pypi30": s.pypi.downloads_30d,
+    "s-repos": s.github.public_repos, "s-commits30": s.github.commits_30d, "s-tags": s.github.tags };
+  Object.keys(put).forEach(function (id) { if (put[id] != null) document.getElementById(id).textContent = Number(put[id]).toLocaleString("en-US"); });
+}).catch(function () {});
+
+/* The header tab of the section in view is highlighted (a click scrolls there, so it follows too); none at the top. */
+(function () {
+  if (!("IntersectionObserver" in window)) return;
+  var tabs = { infra: document.querySelector(".bar nav a.infra"), app: document.querySelector(".bar nav a.app") };
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) { if (!e.isIntersecting) return;
+      Object.keys(tabs).forEach(function (k) { tabs[k].classList.toggle("on", k === e.target.id); }); });
+  }, { rootMargin: "-45% 0px -50% 0px" });
+  ["top", "infra", "app"].forEach(function (id) { var sec = id === "top" ? document.querySelector(".hero") : document.getElementById(id); if (sec) { if (id === "top") sec.id = sec.id || "hero"; io.observe(sec); } });
+})();
 
 
 /* Language: every [data-i18n] element takes its text from strings.json ("en" / "zh", same keys side by side);
@@ -345,19 +351,23 @@ document.addEventListener("live", function () {
   function remember(l) { try { localStorage.setItem(KEY, l); } catch (e) {} }
   function saved() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
   function fromHash() { var h = location.hash.slice(1); return h === "zh" || h === "en" ? h : null; }
+  var BLOCK = { H1: 1, H2: 1, H3: 1, P: 1, DIV: 1 };
+  function both() {   // once: every node gets its English and Chinese in one cell, so a switch never moves anything
+    var en = (strings && strings.en) || {}, zh = (strings && strings.zh) || {};
+    nodes.forEach(function (n) {
+      var k = n.getAttribute("data-i18n");
+      n.innerHTML = '<span lang="en">' + (en[k] != null ? en[k] : page[k]) + '</span><span lang="zh-CN">' + (zh[k] != null ? zh[k] : page[k]) + "</span>";
+      n.classList.add("bi"); if (BLOCK[n.tagName]) n.classList.add("block");
+    });
+  }
   function render(lang) {
-    var t = (strings && strings[lang]) || {};
-    nodes.forEach(function (n) { var k = n.getAttribute("data-i18n"); n.innerHTML = t[k] != null ? t[k] : page[k]; });
     document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
-    button.textContent = lang === "zh" ? "EN" : "中文";
-    button.setAttribute("lang", lang === "zh" ? "en" : "zh-CN");
-    button.setAttribute("aria-label", lang === "zh" ? "Switch to English" : "切换到中文");
     current = lang;
   }
   function use(lang) {
     if (strings) { render(lang); return; }
     fetch("strings.json", { cache: "no-cache" }).then(function (r) { return r.json(); })
-      .then(function (d) { strings = d; render(lang); }).catch(function () { render("en"); });
+      .then(function (d) { strings = d; both(); render(lang); }).catch(function () { render("en"); });
   }
   button.addEventListener("click", function () { var next = current === "zh" ? "en" : "zh"; remember(next); use(next); });
   window.addEventListener("hashchange", function () { var h = fromHash(); if (h && h !== current) { remember(h); use(h); } });

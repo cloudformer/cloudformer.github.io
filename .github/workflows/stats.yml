@@ -1,0 +1,29 @@
+# Once a day: refresh stats.json (the Distribution numbers on the homepage) and commit it when a number changed.
+name: stats
+
+on:
+  schedule:
+    - cron: "17 3 * * *"   # 03:17 UTC daily
+  workflow_dispatch:        # or by hand: Actions → stats → Run workflow
+
+permissions:
+  contents: write
+
+jobs:
+  stats:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 scripts/stats.py
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: Commit when changed
+        run: |
+          git diff --quiet stats.json && { echo "no change"; exit 0; }
+          git config user.name "github-actions[bot]"
+          git config user.email "41898299+github-actions[bot]@users.noreply.github.com"
+          git commit -m "stats: $(date -u +%F)" stats.json
+          git push
