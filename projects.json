@@ -23,7 +23,7 @@
           "was": "~$14–45",
           "idle_month": 14,
           "now": "$0",
-          "status": "0.2.1 on PyPI",
+          "status": "0.3.7 on PyPI",
           "live": true
         },
         {
@@ -51,7 +51,7 @@
           "was": "~$360",
           "idle_month": 360,
           "now": "$0",
-          "status": "0.1.0 on PyPI",
+          "status": "0.1.1 on PyPI",
           "live": true
         },
         {
@@ -64,7 +64,7 @@
           "use": "from s3shift import redshift_connector",
           "was": "~$3 / h awake",
           "now": "$0",
-          "status": "0.1.1 on PyPI",
+          "status": "0.1.2 on PyPI",
           "live": true
         }
       ],
@@ -92,7 +92,7 @@
           "use": "vault CLI, Terraform provider, UI: only VAULT_ADDR",
           "was": "~$450 HCP / ~$20 3 × t4g.micro",
           "idle_month": 20,
-          "status": "0.1.0 on PyPI",
+          "status": "0.1.2 on PyPI",
           "live": true
         },
         {
@@ -116,8 +116,8 @@
           "built_on": "Lambda + S3 (SSE-KMS)",
           "use": "a web UI over your .kdbx files; KeePassXC still opens them",
           "was": "a sync service",
-          "status": "in progress",
-          "live": false
+          "status": "0.1.10 on PyPI",
+          "live": true
         }
       ]
     }
