@@ -14,6 +14,7 @@
       "projects": [
         {
           "name": "s3rds",
+          "label": "rds",
           "url": "https://github.com/cloudformer/s3rds",
           "diagram": "https://raw.githubusercontent.com/cloudformer/s3rds/main/docs/architecture.svg",
           "demo": "",
@@ -28,6 +29,7 @@
         },
         {
           "name": "dynamoredis",
+          "label": "redis",
           "url": "https://github.com/cloudformer/dynamoredis",
           "diagram": "https://raw.githubusercontent.com/cloudformer/dynamoredis/main/docs/architecture.svg",
           "demo": "",
@@ -42,6 +44,7 @@
         },
         {
           "name": "lambdaflow",
+          "label": "airflow",
           "url": "https://github.com/cloudformer/lambdaflow",
           "diagram": "https://raw.githubusercontent.com/cloudformer/lambdaflow/main/docs/architecture.svg",
           "demo": "",
@@ -56,6 +59,7 @@
         },
         {
           "name": "s3shift",
+          "label": "redshift",
           "url": "https://github.com/cloudformer/s3shift",
           "diagram": "https://raw.githubusercontent.com/cloudformer/s3shift/main/docs/architecture.svg",
           "demo": "",
@@ -84,6 +88,7 @@
       "projects": [
         {
           "name": "lambdavault",
+          "label": "secrets",
           "url": "https://github.com/cloudformer/lambdavault",
           "diagram": "https://raw.githubusercontent.com/cloudformer/lambdavault/main/docs/architecture.svg",
           "demo": "",
@@ -97,6 +102,7 @@
         },
         {
           "name": "lambdachecks",
+          "label": "monitoring",
           "url": "https://github.com/cloudformer/lambdachecks",
           "diagram": "https://raw.githubusercontent.com/cloudformer/lambdachecks/main/docs/architecture.svg",
           "demo": "",
@@ -109,6 +115,7 @@
         },
         {
           "name": "s3keepass",
+          "label": "password",
           "url": "https://github.com/cloudformer/s3keepass",
           "diagram": "https://raw.githubusercontent.com/cloudformer/s3keepass/main/docs/architecture.svg",
           "demo": "",
@@ -117,6 +124,32 @@
           "use": "a web UI over your .kdbx files; KeePassXC still opens them",
           "was": "a sync service",
           "status": "0.1.10 on PyPI",
+          "live": true
+        },
+        {
+          "name": "lambdazap",
+          "label": "security",
+          "url": "https://github.com/cloudformer/lambdazap",
+          "diagram": "https://raw.githubusercontent.com/cloudformer/lambdazap/main/docs/architecture.svg",
+          "demo": "",
+          "what": "OWASP ZAP web scanner",
+          "built_on": "Lambda console + CodeBuild (scan) + S3",
+          "use": "a web console: baseline / full / api scans, reports to S3",
+          "was": "a VM running ZAP",
+          "status": "0.1.2 on PyPI",
+          "live": true
+        },
+        {
+          "name": "lambdakali",
+          "label": "security",
+          "url": "https://github.com/cloudformer/lambdakali",
+          "diagram": "https://raw.githubusercontent.com/cloudformer/lambdakali/main/docs/architecture.svg",
+          "demo": "",
+          "what": "Kali Linux command console",
+          "built_on": "Lambda console + CodeBuild (Kali image) + S3",
+          "use": "run commands on Kali from the browser; results and loot to S3",
+          "was": "an EC2 Kali box",
+          "status": "0.1.2 on PyPI",
           "live": true
         }
       ]

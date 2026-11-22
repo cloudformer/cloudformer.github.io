@@ -15,6 +15,7 @@
   --paper: #f2f4f6; --sheet: #ffffff; --ink: #121a22; --muted: #5b6874; --rule: #d6dce2;
   --accent: #0a6e5c; --accent-soft: #e0f0ec; --strike: #b4372f; --chip: #e8ecf0;
   --app: #9a5b0b; --app-soft: #f7ecda; --tint: #e8f1ee; --grid: rgba(10, 110, 92, 0.07);
+  --sec: #4a57c4;
   --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
   --body: "IBM Plex Sans", "Helvetica Neue", Arial, system-ui, sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
@@ -25,6 +26,7 @@
     --paper: #0e1418; --sheet: #151d23; --ink: #e6ecf0; --muted: #93a1ad; --rule: #26323b;
     --accent: #4fd1b0; --accent-soft: #143430; --strike: #f0857a; --chip: #1e2a32;
     --app: #f2b35c; --app-soft: #33281a; --tint: #11201f; --grid: rgba(79, 209, 176, 0.06);
+    --sec: #9aa6f3;
     --accent-soft-2: #1a403a; --app-soft-2: #3e3120; --sheet-2: #1b252c;
     --accent-pale: #12252a; --accent-line: #24504a; --app-pale: #261f16; --app-line: #4d3c22; --neutral-line: #3a4752;
     color-scheme: dark;
@@ -34,6 +36,7 @@
   --paper: #0e1418; --sheet: #151d23; --ink: #e6ecf0; --muted: #93a1ad; --rule: #26323b;
   --accent: #4fd1b0; --accent-soft: #143430; --strike: #f0857a; --chip: #1e2a32;
   --app: #f2b35c; --app-soft: #33281a; --tint: #11201f; --grid: rgba(79, 209, 176, 0.06);
+  --sec: #9aa6f3;
   --accent-soft-2: #1a403a; --app-soft-2: #3e3120; --sheet-2: #1b252c;
   --accent-pale: #12252a; --accent-line: #24504a; --app-pale: #261f16; --app-line: #4d3c22; --neutral-line: #3a4752;
   color-scheme: dark;
@@ -118,6 +121,9 @@ section.block { scroll-margin-top: 4.5rem; }
 
 .thumb { position: relative; overflow: visible; }
 .thumb .clip { display: block; width: 100%; height: 100%; overflow: hidden; border-radius: 4px; }
+/* category label on the thumbnail corner: infra = teal, app = amber, security = indigo (set inline) */
+.ribbon { position: absolute; top: 0; left: 0; z-index: 2; font: 600 0.55rem/1 var(--mono); letter-spacing: 0.05em; text-transform: uppercase;
+  color: #fff; padding: 0.22rem 0.42rem; border-radius: 4px 0 6px 0; pointer-events: none; }
 .preview { position: absolute; left: 0; top: calc(100% + 10px); z-index: 30; width: min(34rem, calc(100vw - 32px)); padding: 0.6rem;
   background: var(--sheet); border: 1px solid var(--rule); border-radius: 8px; box-shadow: 0 24px 48px -22px rgba(18,26,34,.55);
   opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .15s, visibility .15s; }
@@ -274,9 +280,14 @@ function load(render) {
   });
 })();
 
-function thumb(p) {
+function thumb(p, section) {
   var t = el("a", "thumb"), clip = el("span", "clip"); t.href = p.diagram; t.setAttribute("aria-label", p.name + " architecture");
   clip.appendChild(diagram(p)); t.appendChild(clip);
+  if (p.label) {   // category corner label: security stands out in indigo, else the section's own hue
+    var rb = el("span", "ribbon", p.label);
+    rb.style.background = p.label === "security" ? "var(--sec)" : (section === "infra" ? "var(--accent)" : "var(--app)");
+    t.appendChild(rb);
+  }
   var f = el("span", "preview"), big = el("img"); big.src = p.diagram; big.alt = ""; big.loading = "lazy"; f.appendChild(big);
   f.appendChild(el("span", null, p.name + " · architecture")); t.appendChild(f);
   t.addEventListener("mouseenter", function () { f.classList.toggle("up", window.innerHeight - t.getBoundingClientRect().bottom < 360); });
@@ -291,8 +302,8 @@ getJSON("https://api.github.com/users/cloudformer").then(function (u) {
   document.getElementById("me-bio").textContent = u.bio || (u.public_repos + " public repositories on GitHub");
 }).catch(function () {});
 function ago(iso) { var d = Math.round((Date.now() - new Date(iso)) / 864e5); return d <= 0 ? "today" : d === 1 ? "yesterday" : d + " days ago"; }
-function line(p) {
-  var r = el("div", "line"), t = thumb(p); r.appendChild(t);
+function line(p, section) {
+  var r = el("div", "line"), t = thumb(p, section); r.appendChild(t);
   var n = el("a", "name", p.name + " ↗"); n.href = p.url; r.appendChild(n);
   var w = el("div"); w.appendChild(el("b", null, p.what)); w.appendChild(el("div", "on", p.built_on)); r.appendChild(w);
   var c = el("div", "idle"), m = p.idle_month;   // monthly idle cost in USD: the grey bar, scaled to $360
@@ -307,7 +318,7 @@ function line(p) {
 load(function (by) { window.BY = by; ["infra", "app"].forEach(function (k) {
   document.getElementById("nav-" + k).textContent = (by[k].projects || []).length;
   var list = document.querySelector("#" + k + " .list"), names = document.getElementById("n-" + k);
-  (by[k].projects || []).forEach(function (p) { names.appendChild(el("span", null, p.name)); list.appendChild(line(p)); });
+  (by[k].projects || []).forEach(function (p) { names.appendChild(el("span", null, p.name)); list.appendChild(line(p, k)); });
 }); if (window.extra) window.extra(by); });
 
 var COSTS = [["Managed Airflow (MWAA)", "lambdaflow", 360], ["Vault on 3 × EC2", "lambdavault", 40], ["RDS (db.t4g.micro)", "s3rds", 14], ["ElastiCache Serverless", "dynamoredis", 6]];
