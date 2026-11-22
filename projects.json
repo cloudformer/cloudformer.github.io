@@ -18,7 +18,7 @@
           "url": "https://github.com/cloudformer/s3rds",
           "diagram": "https://raw.githubusercontent.com/cloudformer/s3rds/main/docs/architecture.svg",
           "demo": "",
-          "what": "RDS (db.t4g.micro and up)",
+          "what": "RDS",
           "built_on": "S3 + Lambda (SQLite)",
           "use": "from s3rds import pymysql · SQLAlchemy · Django",
           "was": "~$14–45",
