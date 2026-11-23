@@ -70,9 +70,24 @@
           "now": "$0",
           "status": "0.1.2 on PyPI",
           "live": true
+        },
+        {
+          "name": "ztna",
+          "label": "vpn",
+          "url": "https://github.com/cloudformer/ztna",
+          "diagram": "https://raw.githubusercontent.com/cloudformer/ztna/main/docs/architecture.svg",
+          "demo": "",
+          "what": "Client VPN / a standing bastion",
+          "built_on": "Lambda console + on-demand EC2 + SSM Session Manager",
+          "use": "pick a network, start a jump, tunnel over SSM: map a port to localhost, or a SOCKS proxy",
+          "was": "~$73 Client VPN",
+          "idle_month": 73,
+          "now": "$0",
+          "status": "0.1.0 on PyPI",
+          "live": true
         }
       ],
-      "next": "s3mongo (DocumentDB / MongoDB on s3rds) is planned · ztna (Client VPN → IAM + Session Manager) has its name reserved."
+      "next": "s3mongo (DocumentDB / MongoDB on s3rds) is planned."
     },
     {
       "id": "app",
