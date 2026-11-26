@@ -7,6 +7,7 @@ import datetime
 import json
 import os
 import re
+import urllib.error
 import urllib.request
 import xmlrpc.client
 
@@ -59,15 +60,25 @@ def registry():
             "downloads": module["downloads"]}
 
 
+def downloads_30d(name):
+    """pypistats has no entry until a package's first downloads are counted: its 404 means 0, honestly."""
+    try:
+        recent, _ = get(f"https://pypistats.org/api/packages/{name}/recent")
+        return recent["data"]["last_month"]
+    except urllib.error.HTTPError as e:
+        if e.code == 404:
+            return 0
+        raise
+
+
 def pypi():
     packages = sorted({name for _role, name in xmlrpc.client.ServerProxy("https://pypi.org/pypi").user_packages(USER)})
-    releases = downloads_30d = 0
+    releases = downloads = 0
     for name in packages:
         meta, _ = get(f"https://pypi.org/pypi/{name}/json")
         releases += len(meta["releases"])
-        recent, _ = get(f"https://pypistats.org/api/packages/{name}/recent")
-        downloads_30d += recent["data"]["last_month"]
-    return {"packages": len(packages), "releases": releases, "downloads_30d": downloads_30d}
+        downloads += downloads_30d(name)
+    return {"packages": len(packages), "releases": releases, "downloads_30d": downloads}
 
 
 def mcp():
