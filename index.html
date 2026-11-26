@@ -159,18 +159,25 @@ section.block { scroll-margin-top: 4.5rem; }
 /* hero: headline left, Get it right */
 .top { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 2rem; align-items: start; }
 .top .lede { display: grid; gap: 1rem; }
+/* Distribution: one five-row table. Fixed columns (key 4.6 / name 10.5 / stats split in 3);
+   on desktop every text is single-line (ellipsis if ever too long), so all rows are equal height
+   by construction. Below 880px the stats move to a second line and may wrap there. */
 .top .ship { grid-template-columns: 1fr; gap: 0; background: var(--sheet); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; }
-.top .ship a { padding: 0.55rem 1rem; grid-template-columns: 4.6rem 10.5rem 1fr; column-gap: 0.9rem; align-items: center;
+.top .ship a { padding: 0.6rem 1rem; grid-template-columns: 4.6rem 10.5rem 1fr; column-gap: 0.9rem; align-items: center;
   background: none; border: 0; border-radius: 0; border-bottom: 1px solid var(--rule); }
 .top .ship a:last-child { border-bottom: 0; }
 .top .ship small { line-height: 1.2; }
-.top .ship b { font-size: 0.95rem; }
+.top .ship b { font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.top .ship .nums { align-items: center; }
 .top .ship .nums b { font-size: 0.9rem; }
-.top .ship .nums { align-items: start; }
-.top .ship .nums > span { align-content: start; justify-items: start; }
-.top .ship .nums [data-i18n] { font-size: 0.64rem; white-space: normal; line-height: 1.15; }
+.top .ship .nums > span { justify-items: start; }
+.top .ship .nums [data-i18n] { font-size: 0.64rem; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
 .top .ship a:hover { box-shadow: inset 3px 0 0 var(--accent); border-color: var(--rule); }
-@media (max-width: 880px) { .top .ship a { grid-template-columns: 4.2rem 1fr; } .top .ship .nums { grid-column: 2; } }
+@media (max-width: 880px) {
+  .top .ship a { grid-template-columns: 4.2rem 1fr; }
+  .top .ship .nums { grid-column: 2; }
+  .top .ship .nums [data-i18n] { white-space: normal; overflow: visible; }
+}
 .nums { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 0.6rem; font-variant-numeric: tabular-nums; }
 .nums > span { display: grid; min-width: 0; line-height: 1.25; color: var(--muted); }
 .nums b { font: 800 1rem/1.15 var(--display) !important; color: var(--accent); }
