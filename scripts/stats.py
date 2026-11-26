@@ -1,4 +1,4 @@
-"""Write stats.json: the Distribution numbers on the homepage, as GitHub, the Terraform Registry and PyPI report them.
+"""Write distribution.json: the Distribution numbers on the homepage, as GitHub, the Terraform Registry and PyPI report them.
 
 Run once a day by .github/workflows/stats.yml (or by hand: python3 scripts/stats.py). Standard library only.
 GITHUB_TOKEN, when set, raises GitHub's rate limit; every call reads public data only.
@@ -12,7 +12,7 @@ import xmlrpc.client
 
 USER = "cloudformer"
 MODULE = "cloudformer/infra/aws"
-OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "stats.json")
+OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "distribution.json")
 
 
 def get(url, token=None):

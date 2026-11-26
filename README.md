@@ -8,7 +8,7 @@ The IdleFree homepage: https://cloudformer.github.io/
   thumbnail, full size on hover), `what`, `built_on`, `was` (the idle cost it replaces, struck out), optional
   `idle_month` (that cost in USD per month: draws the grey bar), optional `now`, `status` and `live`. A section's `id`
   (`infra` / `app`) picks its color.
-- `strings.json` — the page's own text, `en` and `zh` side by side under the same keys (each element's `data-i18n`).
+- `content.json` — the page's own text, `en` and `zh` side by side under the same keys (each element's `data-i18n`).
   The English written in `index.html` is the fallback. `cloudformer.github.io/#zh` opens in Chinese; the 中文 / EN
   button switches and is remembered in the browser. Project rows stay English.
 - Pulled live as the page loads: the GitHub avatar and name, each project's PyPI version (replaces `status` when the

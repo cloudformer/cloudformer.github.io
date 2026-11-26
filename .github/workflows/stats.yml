@@ -1,4 +1,4 @@
-# Once a day: refresh stats.json (the Distribution numbers on the homepage) and commit it when a number changed.
+# Once a day: refresh distribution.json (the Distribution numbers on the homepage) and commit it when a number changed.
 name: stats
 
 on:
@@ -22,8 +22,8 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
       - name: Commit when changed
         run: |
-          git diff --quiet stats.json && { echo "no change"; exit 0; }
+          git diff --quiet distribution.json && { echo "no change"; exit 0; }
           git config user.name "github-actions[bot]"
           git config user.email "41898299+github-actions[bot]@users.noreply.github.com"
-          git commit -m "stats: $(date -u +%F)" stats.json
+          git commit -m "stats: $(date -u +%F)" distribution.json
           git push

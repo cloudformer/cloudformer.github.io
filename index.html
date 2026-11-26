@@ -350,8 +350,8 @@ function costs(id, bars) {
     box.appendChild(r);
   });
 }
-/* The Distribution numbers come from stats.json when it exists (the numbers written in the page are the fallback). */
-fetch("stats.json", { cache: "no-cache" }).then(function (r) { if (!r.ok) throw 0; return r.json(); }).then(function (s) {
+/* The Distribution numbers come from distribution.json when it exists (the numbers written in the page are the fallback). */
+fetch("distribution.json", { cache: "no-cache" }).then(function (r) { if (!r.ok) throw 0; return r.json(); }).then(function (s) {
   var put = { "s-modules": s.registry.modules, "s-versions": s.registry.versions, "s-downloads": s.registry.downloads,
     "s-packages": s.pypi.packages, "s-releases": s.pypi.releases, "s-pypi30": s.pypi.downloads_30d,
     "s-repos": s.github.public_repos, "s-commits30": s.github.commits_30d, "s-tags": s.github.tags,
@@ -372,7 +372,7 @@ fetch("stats.json", { cache: "no-cache" }).then(function (r) { if (!r.ok) throw 
 })();
 
 
-/* Language: every [data-i18n] element takes its text from strings.json ("en" / "zh", same keys side by side);
+/* Language: every [data-i18n] element takes its text from content.json ("en" / "zh", same keys side by side);
    the English written in the page is the fallback. #zh / #en in the address picks one (cloudformer.github.io/#zh),
    otherwise the last choice in this browser, otherwise English. Project rows (projects.json) stay English. */
 (function () {
@@ -397,7 +397,7 @@ fetch("stats.json", { cache: "no-cache" }).then(function (r) { if (!r.ok) throw 
   }
   function use(lang) {
     if (strings) { render(lang); return; }
-    fetch("strings.json", { cache: "no-cache" }).then(function (r) { return r.json(); })
+    fetch("content.json", { cache: "no-cache" }).then(function (r) { return r.json(); })
       .then(function (d) { strings = d; both(); render(lang); }).catch(function () { render("en"); });
   }
   button.addEventListener("click", function () { var next = current === "zh" ? "en" : "zh"; remember(next); use(next); });
