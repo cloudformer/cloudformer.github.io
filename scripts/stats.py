@@ -7,6 +7,8 @@ import datetime
 import json
 import os
 import re
+import sys
+import time
 import urllib.error
 import urllib.request
 import xmlrpc.client
@@ -16,13 +18,25 @@ MODULE = "cloudformer/infra/aws"
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "distribution.json")
 
 
-def get(url, token=None):
-    """(JSON body, Link header) of a GET."""
+def get(url, token=None, _retry=True):
+    """(JSON body, Link header) of a GET. One retry on transient trouble (5xx, 429, dropped
+    connection); a definitive answer like 404 is returned to the caller to interpret."""
     headers = {"User-Agent": "cloudformer-stats", "Accept": "application/json"}
     if token:
         headers["Authorization"] = "Bearer " + token
-    with urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=30) as r:
-        return json.loads(r.read()), r.headers.get("Link", "")
+    try:
+        with urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=30) as r:
+            return json.loads(r.read()), r.headers.get("Link", "")
+    except urllib.error.HTTPError as e:
+        if _retry and (e.code >= 500 or e.code == 429):
+            time.sleep(5)
+            return get(url, token, _retry=False)
+        raise
+    except urllib.error.URLError:
+        if _retry:
+            time.sleep(5)
+            return get(url, token, _retry=False)
+        raise
 
 
 def github_count(url, token):
@@ -72,7 +86,12 @@ def downloads_30d(name):
 
 
 def pypi():
-    packages = sorted({name for _role, name in xmlrpc.client.ServerProxy("https://pypi.org/pypi").user_packages(USER)})
+    try:
+        raw = xmlrpc.client.ServerProxy("https://pypi.org/pypi").user_packages(USER)
+    except Exception:  # transient XMLRPC hiccup: one retry, then fail honestly
+        time.sleep(5)
+        raw = xmlrpc.client.ServerProxy("https://pypi.org/pypi").user_packages(USER)
+    packages = sorted({name for _role, name in raw})
     releases = downloads = 0
     for name in packages:
         meta, _ = get(f"https://pypi.org/pypi/{name}/json")
@@ -89,12 +108,37 @@ def mcp():
 
 
 def main():
-    stats = {"date": datetime.date.today().isoformat(), "github": github(os.environ.get("GITHUB_TOKEN")),
-             "registry": registry(), "pypi": pypi(), "mcp": mcp()}
+    """Display data, refreshed daily: a source that fails today keeps yesterday's numbers and is
+    retried tomorrow — the run never dies over one source (first ever run excepted: nothing to
+    fall back to, so it fails loudly)."""
+    try:
+        with open(OUT, encoding="utf-8") as f:
+            prev = json.load(f)
+    except (OSError, ValueError):
+        prev = {}
+    sections = (("github", lambda: github(os.environ.get("GITHUB_TOKEN"))),
+                ("registry", registry), ("pypi", pypi), ("mcp", mcp))
+    today = datetime.date.today()
+    stats, stale = {"date": today.isoformat()}, {}
+    for key, fetch in sections:
+        try:
+            stats[key] = fetch()
+        except Exception as e:  # noqa: BLE001 — any failure: keep yesterday's section
+            if key not in prev:
+                raise
+            stale[key] = prev.get("stale", {}).get(key, today.isoformat())
+            print(f"{key}: {type(e).__name__}: {e} — keeping the numbers of {stale[key]}")
+            stats[key] = prev[key]
+    if stale:
+        stats["stale"] = stale
     with open(OUT, "w", encoding="utf-8") as f:
         json.dump(stats, f, indent=2)
         f.write("\n")
     print(json.dumps(stats))
+    overdue = {k: v for k, v in stale.items() if (today - datetime.date.fromisoformat(v)).days > 3}
+    if overdue:
+        print(f"STALE ALARM: falling back for over 3 days — the source likely changed: {overdue}")
+        sys.exit(1)
 
 
 if __name__ == "__main__":

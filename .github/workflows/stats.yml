@@ -18,6 +18,8 @@ jobs:
         with:
           python-version: "3.12"
       - run: python3 scripts/stats.py
+        id: stats
+        continue-on-error: true   # a stale alarm still commits yesterday's real numbers first
         env:
           GITHUB_TOKEN: ${{ github.token }}
       - name: Commit when changed
@@ -27,3 +29,6 @@ jobs:
           git config user.email "41898299+github-actions[bot]@users.noreply.github.com"
           git commit -m "stats: $(date -u +%F)" distribution.json
           git push
+      - name: Surface the stale alarm (red run -> GitHub failure email)
+        if: steps.stats.outcome == 'failure'
+        run: exit 1
