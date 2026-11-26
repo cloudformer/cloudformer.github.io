@@ -101,10 +101,16 @@ def pypi():
 
 
 def mcp():
-    """The official MCP Registry: how many servers under io.github.<USER>, and the latest version."""
+    """The official MCP Registry: servers under io.github.<USER> and the latest version. The tool
+    count has no registry API — the authoritative list is the registered decorators in the public
+    source, so count those."""
     data, _ = get(f"https://registry.modelcontextprotocol.io/v0/servers?search=io.github.{USER}")
     mine = [x["server"] for x in data.get("servers", []) if x["server"]["name"].startswith(f"io.github.{USER}/")]
-    return {"servers": len(mine), "latest": mine[0]["version"] if mine else ""}
+    req = urllib.request.Request(f"https://raw.githubusercontent.com/{USER}/idlefree-mcp/main/idlefree_mcp/server.py",
+                                 headers={"User-Agent": "cloudformer-stats"})
+    with urllib.request.urlopen(req, timeout=30) as r:
+        tools = r.read().decode().count("@server.tool()")
+    return {"servers": len(mine), "latest": mine[0]["version"] if mine else "", "tools": tools}
 
 
 def main():
