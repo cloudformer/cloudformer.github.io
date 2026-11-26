@@ -157,7 +157,7 @@ section.block { scroll-margin-top: 4.5rem; }
 .me .go { font: 500 0.8rem/1 var(--mono); color: var(--accent); margin-left: 0.4rem; transition: transform .15s; }
 .me:hover .go { transform: translateX(3px); }
 /* hero: headline left, Get it right */
-.top { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 2rem; align-items: start; }
+.top { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 2rem; align-items: start; }
 .top .lede { display: grid; gap: 1rem; }
 .top .ship { grid-template-columns: 1fr; gap: 0; background: var(--sheet); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; }
 .top .ship a { padding: 0.55rem 1rem; grid-template-columns: 4.6rem 10.5rem 1fr; column-gap: 0.9rem; align-items: center;
@@ -166,6 +166,8 @@ section.block { scroll-margin-top: 4.5rem; }
 .top .ship small { line-height: 1.2; }
 .top .ship b { font-size: 0.95rem; }
 .top .ship .nums b { font-size: 0.9rem; }
+.top .ship .nums { align-items: start; }
+.top .ship .nums > span { align-content: start; justify-items: start; }
 .top .ship .nums [data-i18n] { font-size: 0.64rem; white-space: normal; line-height: 1.15; }
 .top .ship a:hover { box-shadow: inset 3px 0 0 var(--accent); border-color: var(--rule); }
 @media (max-width: 880px) { .top .ship a { grid-template-columns: 4.2rem 1fr; } .top .ship .nums { grid-column: 2; } }
