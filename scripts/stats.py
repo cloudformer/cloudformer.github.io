@@ -70,9 +70,16 @@ def pypi():
     return {"packages": len(packages), "releases": releases, "downloads_30d": downloads_30d}
 
 
+def mcp():
+    """The official MCP Registry: how many servers under io.github.<USER>, and the latest version."""
+    data, _ = get(f"https://registry.modelcontextprotocol.io/v0/servers?search=io.github.{USER}")
+    mine = [x["server"] for x in data.get("servers", []) if x["server"]["name"].startswith(f"io.github.{USER}/")]
+    return {"servers": len(mine), "latest": mine[0]["version"] if mine else ""}
+
+
 def main():
     stats = {"date": datetime.date.today().isoformat(), "github": github(os.environ.get("GITHUB_TOKEN")),
-             "registry": registry(), "pypi": pypi()}
+             "registry": registry(), "pypi": pypi(), "mcp": mcp()}
     with open(OUT, "w", encoding="utf-8") as f:
         json.dump(stats, f, indent=2)
         f.write("\n")

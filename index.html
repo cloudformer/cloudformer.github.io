@@ -159,11 +159,16 @@ section.block { scroll-margin-top: 4.5rem; }
 /* hero: headline left, Get it right */
 .top { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 2rem; align-items: start; }
 .top .lede { display: grid; gap: 1rem; }
-.top .ship { grid-template-columns: 1fr; gap: 0.6rem; }
-.top .ship a { padding: 0.7rem 1rem; grid-template-columns: auto 1fr; column-gap: 0.8rem; align-items: center; }
-.top .ship small { grid-row: span 2; width: 4.4rem; }
-.top .ship b { font-size: 1rem; }
+.top .ship { grid-template-columns: 1fr; gap: 0; background: var(--sheet); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; }
+.top .ship a { padding: 0.55rem 1rem; grid-template-columns: 4.6rem 10.5rem 1fr; column-gap: 0.9rem; align-items: center;
+  background: none; border: 0; border-radius: 0; border-bottom: 1px solid var(--rule); }
+.top .ship a:last-child { border-bottom: 0; }
 .top .ship small { line-height: 1.2; }
+.top .ship b { font-size: 0.95rem; }
+.top .ship .nums b { font-size: 0.9rem; }
+.top .ship .nums [data-i18n] { font-size: 0.64rem; }
+.top .ship a:hover { box-shadow: inset 3px 0 0 var(--accent); border-color: var(--rule); }
+@media (max-width: 880px) { .top .ship a { grid-template-columns: 4.2rem 1fr; } .top .ship .nums { grid-column: 2; } }
 .nums { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 0.6rem; font-variant-numeric: tabular-nums; }
 .nums > span { display: grid; min-width: 0; line-height: 1.25; color: var(--muted); }
 .nums b { font: 800 1rem/1.15 var(--display) !important; color: var(--accent); }
@@ -219,6 +224,10 @@ html[lang="zh-CN"] .bi > [lang="en"], html:not([lang="zh-CN"]) .bi > [lang="zh-C
         <span class="nums"><span><b id="s-packages">16</b><span data-i18n="n_packages">packages</span></span><span><b id="s-releases">59</b><span data-i18n="n_releases">releases</span></span><span><b id="s-pypi30">6,520</b><span data-i18n="n_pypi30">downloads (30d)</span></span></span></a>
       <a href="https://github.com/cloudformer"><small data-i18n="code_k">Source</small><b>GitHub ↗</b>
         <span class="nums"><span><b id="s-repos">17</b><span data-i18n="n_repos">public repos</span></span><span><b id="s-commits30">224</b><span data-i18n="n_commits30">commits (30d)</span></span><span><b id="s-tags">49</b><span data-i18n="n_tags">tagged releases</span></span></span></a>
+      <a href="https://registry.modelcontextprotocol.io/v0/servers?search=io.github.cloudformer"><small data-i18n="ai_k">AI tools</small><b>MCP Registry ↗</b>
+        <span class="nums"><span><b id="s-mcp-servers">1</b><span data-i18n="n_server">server</span></span><span><b>2</b><span data-i18n="n_tools">tools</span></span><span><b id="s-mcp-latest">0.1.0</b><span data-i18n="n_latest">latest</span></span></span></a>
+      <a><small data-i18n="aiflow_k">AI workflow</small><b>Claude plugin</b>
+        <span class="nums"><span><b>1</b><span data-i18n="n_plugin">plugin</span></span><span><b>2</b><span data-i18n="n_skills">skills</span></span><span><b>1</b><span data-i18n="n_mcpsrv">MCP server</span></span></span></a>
     </div></div></div>
     <div class="doors">
       <a class="door infra" href="#infra"><h2>IdleFree Infra <span>→</span></h2><p data-i18n="infra_p">An AWS service, rebuilt. Same client, same API; the real service is one import away.</p><div class="names" id="n-infra"></div></a>
@@ -336,8 +345,10 @@ function costs(id, bars) {
 fetch("stats.json", { cache: "no-cache" }).then(function (r) { if (!r.ok) throw 0; return r.json(); }).then(function (s) {
   var put = { "s-modules": s.registry.modules, "s-versions": s.registry.versions, "s-downloads": s.registry.downloads,
     "s-packages": s.pypi.packages, "s-releases": s.pypi.releases, "s-pypi30": s.pypi.downloads_30d,
-    "s-repos": s.github.public_repos, "s-commits30": s.github.commits_30d, "s-tags": s.github.tags };
+    "s-repos": s.github.public_repos, "s-commits30": s.github.commits_30d, "s-tags": s.github.tags,
+    "s-mcp-servers": s.mcp && s.mcp.servers };
   Object.keys(put).forEach(function (id) { if (put[id] != null) document.getElementById(id).textContent = Number(put[id]).toLocaleString("en-US"); });
+  if (s.mcp && s.mcp.latest) document.getElementById("s-mcp-latest").textContent = s.mcp.latest;
 }).catch(function () {});
 
 /* The header tab of the section in view is highlighted (a click scrolls there, so it follows too); none at the top. */

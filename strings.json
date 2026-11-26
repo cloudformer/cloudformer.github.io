@@ -17,7 +17,15 @@
     "n_pypi30": "downloads (30d)",
     "n_repos": "public repos",
     "n_commits30": "commits (30d)",
-    "n_tags": "tagged releases"
+    "n_tags": "tagged releases",
+    "ai_k": "AI tools",
+    "aiflow_k": "AI workflow",
+    "n_server": "server",
+    "n_tools": "tools",
+    "n_latest": "latest",
+    "n_plugin": "plugin",
+    "n_skills": "skills",
+    "n_mcpsrv": "MCP server"
   },
   "zh": {
     "hero_h1": "空闲时零成本的云服务。",
@@ -37,6 +45,14 @@
     "n_pypi30": "近 30 天下载量",
     "n_repos": "公开仓库",
     "n_commits30": "近 30 天提交",
-    "n_tags": "版本标签"
+    "n_tags": "版本标签",
+    "ai_k": "AI 工具",
+    "aiflow_k": "AI 工作流",
+    "n_server": "服务",
+    "n_tools": "工具",
+    "n_latest": "最新版",
+    "n_plugin": "插件",
+    "n_skills": "技能",
+    "n_mcpsrv": "MCP 服务"
   }
 }
