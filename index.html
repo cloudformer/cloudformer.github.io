@@ -228,15 +228,15 @@ html[lang="zh-CN"] .bi > [lang="en"], html:not([lang="zh-CN"]) .bi > [lang="zh-C
   <section class="hero"><div class="wrap">
     <div class="top"><div class="lede"><a class="me" href="https://github.com/cloudformer" title="cloudformer on GitHub"><img id="me-avatar" src="https://github.com/cloudformer.png?size=96" alt=""><div><b id="me-name">cloudformer</b><span id="me-bio">open source on GitHub</span></div><span class="go">GitHub ↗</span></a><h1 data-i18n="hero_h1">Cloud services with zero cost when idle.</h1><p data-i18n="hero_p">AWS's serverless databases, caches and schedulers still bill by the hour, as do self-hosted applications. IdleFree reimplements them on Lambda, S3 and DynamoDB: billed per request, with zero cost when idle.</p></div><div><h3 data-i18n="get_h">Distribution</h3><div class="ship">
       <a href="https://registry.terraform.io/modules/cloudformer/infra/aws"><small data-i18n="deploy_k">Deploy</small><b>Terraform Registry ↗</b>
-        <span class="nums"><span><b id="s-modules">6</b><span data-i18n="n_modules">modules</span></span><span><b id="s-versions">11</b><span data-i18n="n_versions">versions</span></span><span><b id="s-downloads">84</b><span data-i18n="n_downloads">downloads</span></span></span></a>
+        <span class="nums"><span><b id="s-modules">–</b><span data-i18n="n_modules">modules</span></span><span><b id="s-versions">–</b><span data-i18n="n_versions">versions</span></span><span><b id="s-downloads">–</b><span data-i18n="n_downloads">downloads</span></span></span></a>
       <a href="https://pypi.org/user/cloudformer/"><small data-i18n="install_k">Install</small><b>PyPI ↗</b>
-        <span class="nums"><span><b id="s-packages">16</b><span data-i18n="n_packages">packages</span></span><span><b id="s-releases">59</b><span data-i18n="n_releases">releases</span></span><span><b id="s-pypi30">6,520</b><span data-i18n="n_pypi30">dl (30d)</span></span></span></a>
+        <span class="nums"><span><b id="s-packages">–</b><span data-i18n="n_packages">packages</span></span><span><b id="s-releases">–</b><span data-i18n="n_releases">releases</span></span><span><b id="s-pypi30">–</b><span data-i18n="n_pypi30">dl (30d)</span></span></span></a>
       <a href="https://github.com/cloudformer"><small data-i18n="code_k">Source</small><b>GitHub ↗</b>
-        <span class="nums"><span><b id="s-repos">17</b><span data-i18n="n_repos">repos</span></span><span><b id="s-commits30">224</b><span data-i18n="n_commits30">commits (30d)</span></span><span><b id="s-tags">49</b><span data-i18n="n_tags">tags</span></span></span></a>
+        <span class="nums"><span><b id="s-repos">–</b><span data-i18n="n_repos">repos</span></span><span><b id="s-commits30">–</b><span data-i18n="n_commits30">commits (30d)</span></span><span><b id="s-tags">–</b><span data-i18n="n_tags">tags</span></span></span></a>
       <a href="https://registry.modelcontextprotocol.io/v0/servers?search=io.github.cloudformer"><small data-i18n="ai_k">AI tools</small><b>MCP Registry ↗</b>
-        <span class="nums"><span><b id="s-mcp-servers">1</b><span data-i18n="n_server">server</span></span><span><b id="s-mcp-tools">2</b><span data-i18n="n_tools">tools</span></span><span><b id="s-mcp-latest">0.1.0</b><span data-i18n="n_latest">latest</span></span></span></a>
+        <span class="nums"><span><b id="s-mcp-servers">–</b><span data-i18n="n_server">server</span></span><span><b id="s-mcp-tools">–</b><span data-i18n="n_tools">tools</span></span><span><b id="s-mcp-latest">–</b><span data-i18n="n_latest">latest</span></span></span></a>
       <a><small data-i18n="aiflow_k">AI workflow</small><b>Claude plugin</b>
-        <span class="nums"><span><b>1</b><span data-i18n="n_plugin">plugin</span></span><span><b>2</b><span data-i18n="n_skills">skills</span></span><span><b>1</b><span data-i18n="n_mcpsrv">MCP server</span></span></span></a>
+        <span class="nums"><span><b id="s-plugin">–</b><span data-i18n="n_plugin">plugin</span></span><span><b id="s-plugin-skills">–</b><span data-i18n="n_skills">skills</span></span><span><b id="s-plugin-mcp">–</b><span data-i18n="n_mcpsrv">MCP server</span></span></span></a>
     </div></div></div>
     <div class="doors">
       <a class="door infra" href="#infra"><h2>IdleFree Infra <span>→</span></h2><p data-i18n="infra_p">An AWS service, rebuilt. Same client, same API; the real service is one import away.</p><div class="names" id="n-infra"></div></a>
@@ -350,12 +350,13 @@ function costs(id, bars) {
     box.appendChild(r);
   });
 }
-/* The Distribution numbers come from distribution.json when it exists (the numbers written in the page are the fallback). */
+/* Every Distribution number comes from distribution.json — the dashes in the markup mean "no data arrived", on purpose: the json carries its own fallback (yesterday's numbers), the page never fakes one. */
 fetch("distribution.json", { cache: "no-cache" }).then(function (r) { if (!r.ok) throw 0; return r.json(); }).then(function (s) {
   var put = { "s-modules": s.registry.modules, "s-versions": s.registry.versions, "s-downloads": s.registry.downloads,
     "s-packages": s.pypi.packages, "s-releases": s.pypi.releases, "s-pypi30": s.pypi.downloads_30d,
     "s-repos": s.github.public_repos, "s-commits30": s.github.commits_30d, "s-tags": s.github.tags,
-    "s-mcp-servers": s.mcp && s.mcp.servers, "s-mcp-tools": s.mcp && s.mcp.tools };
+    "s-mcp-servers": s.mcp && s.mcp.servers, "s-mcp-tools": s.mcp && s.mcp.tools,
+    "s-plugin": s.plugin && s.plugin.plugins, "s-plugin-skills": s.plugin && s.plugin.skills, "s-plugin-mcp": s.plugin && s.plugin.mcp_servers };
   Object.keys(put).forEach(function (id) { if (put[id] != null) document.getElementById(id).textContent = Number(put[id]).toLocaleString("en-US"); });
   if (s.mcp && s.mcp.latest) document.getElementById("s-mcp-latest").textContent = s.mcp.latest;
   if (s.github && s.github.public_repos != null) document.getElementById("me-bio").textContent = s.github.public_repos + " public repositories on GitHub";

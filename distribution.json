@@ -2,7 +2,7 @@
   "date": "2026-11-26",
   "github": {
     "public_repos": 24,
-    "commits_30d": 283,
+    "commits_30d": 285,
     "tags": 86
   },
   "registry": {
@@ -17,6 +17,11 @@
   },
   "mcp": {
     "servers": 1,
-    "latest": "0.1.0"
+    "latest": "0.1.0",
+  },
+  "plugin": {
+    "plugins": 1,
+    "skills": 2,
+    "mcp_servers": 1
   }
 }

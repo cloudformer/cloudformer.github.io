@@ -135,6 +135,9 @@ def main():
             stale[key] = prev.get("stale", {}).get(key, today.isoformat())
             print(f"{key}: {type(e).__name__}: {e} — keeping the numbers of {stale[key]}")
             stats[key] = prev[key]
+    # hand-maintained numbers live in the json too (the page reads one file for everything):
+    # the script never computes them, it carries them forward; edit them in distribution.json.
+    stats["plugin"] = prev.get("plugin", {"plugins": 1, "skills": 2, "mcp_servers": 1})
     if stale:
         stats["stale"] = stale
     with open(OUT, "w", encoding="utf-8") as f:
